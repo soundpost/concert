@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>사운드포스트 정기 연주회 초대장</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fdfbf7;
+            font-family: 'Noto Serif KR', serif;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 500px; /* 모바일 가로 너비 최적화 */
+            margin: 0 auto;
+            background: #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* 공통 이미지 스타일 */
+        img {
+            width: 100%;
+            display: block;
+            height: auto;
+        }
+
+        /* 섹션 간격 */
+        section {
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        /* 하단 안내 및 버튼 영역 */
+        .info-section {
+            padding: 40px 20px;
+            text-align: center;
+            background-color: #fff;
+        }
+
+        .info-text {
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .info-text h2 {
+            font-size: 1.5rem;
+            color: #3d2b1f;
+            margin-bottom: 15px;
+        }
+
+        .map-button {
+            display: inline-block;
+            background-color: #3d2b1f;
+            color: #fff;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+
+        .map-button:active {
+            transform: scale(0.95);
+        }
+
+        footer {
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #999;
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <section id="main-poster">
+            <img src="poster.png" alt="사운드포스트 연주회 포스터"> </section>
+
+        <section id="greetings">
+            <img src="profile.jpg" alt="지휘자 석민지 및 단원 프로필"> </section>
+
+        <section id="program">
+            <img src="program.png" alt="연주 프로그램 목록"> </section>
+
+        <section class="info-section">
+            <div class="info-text">
+                <h2>일시 및 장소</h2>
+                <p><strong>2026. 03. 28 (토) 오후 2시</strong><br>
+                오산아이드림극장</p> </div>
+            
+            <a href="https://m.map.naver.com/search2/search.naver?query=오산아이드림극장" class="map-button" target="_blank">
+                📍 오산아이드림극장 길찾기
+            </a>
+        </section>
+
+        <footer>
+            &copy; 2026 Soundpost String Orchestra.<br>
+            삼성전자 아마추어 현악 동호회 사운드포스트
+        </footer>
+    </div>
+
+</body>
+</html>
+

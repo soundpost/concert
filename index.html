@@ -3,43 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>사운드포스트 정기 연주회 초대장 (확대 가능)</title>
+    <title>사운드포스트 정기 연주회 초대장</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             background-color: #fdfbf7;
             font-family: 'Noto Serif KR', serif;
             color: #333;
-            /* 모바일에서 텍스트 크기 자동 조절 방지 (확대 시 선명도 유지) */
             -webkit-text-size-adjust: none;
-            -moz-text-size-adjust: none;
-            -ms-text-size-adjust: none;
-            text-size-adjust: none;
         }
 
         .container {
-            max-width: 500px; /* 기본 레이아웃 유지 */
+            max-width: 500px;
             margin: 0 auto;
             background: #fff;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
 
-        /* 공통 이미지 스타일: 부모 너비에 맞춤 */
-        img {
-            width: 100%;
-            display: block;
-            height: auto;
-        }
+        img { width: 100%; display: block; height: auto; }
 
-        /* 섹션 간격 */
-        section {
-            padding: 0;
-            margin-bottom: 20px;
-        }
+        section { margin-bottom: 20px; }
 
-        /* 하단 안내 및 버튼 영역 (확대 시에도 보기 편하게 스타일 조정) */
         .info-section {
             padding: 40px 20px;
             text-align: center;
@@ -50,23 +35,47 @@
             font-size: 1.5rem;
             color: #3d2b1f;
             margin-bottom: 15px;
+            border-bottom: 2px solid #d4af37;
+            display: inline-block;
+            padding-bottom: 5px;
         }
 
-        .map-button {
-            display: inline-block;
-            background-color: #3d2b1f;
-            color: #fff;
-            padding: 15px 30px;
+        /* 버튼 스타일 */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .action-button {
+            display: block;
+            padding: 15px 20px;
             text-decoration: none;
             border-radius: 30px;
             font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
-            margin-top: 20px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        .map-button:active {
-            transform: scale(0.95);
+        .map-button { background-color: #3d2b1f; color: #fff; }
+        .web-button { background-color: #fff; color: #3d2b1f; border: 1px solid #3d2b1f; }
+
+        /* 아이드림센터 정보 박스 */
+        .center-info {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #f9f6f2;
+            border-radius: 15px;
+            text-align: left;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .center-info h3 {
+            margin-top: 0;
+            color: #d4af37;
+            font-size: 1.1rem;
         }
 
         footer {
@@ -95,14 +104,29 @@
 
         <section class="info-section">
             <div class="info-text">
-                <h2>일시 및 장소</h2>
+                <h2>공연장 안내</h2>
                 <p><strong>2026. 03. 28 (토) 오후 2시</strong><br>
                 오산아이드림극장</p>
             </div>
             
-            <a href="https://m.place.naver.com/place/2018039723/location?filter=location&selected_place_id=2018039723" class="map-button" target="_blank">
-                📍 오산아이드림극장 길찾기
-            </a>
+            <div class="btn-group">
+                <a href="https://m.place.naver.com/place/2018039723/location?filter=location&selected_place_id=2018039723" class="action-button map-button" target="_blank">
+                    📍 네이버 지도로 길찾기
+                </a>
+            </div>
+
+            <div class="center-info">
+                <h3>💡 공연 전후로 즐기는 '오산아이드림센터'</h3>
+                <p>공연이 열리는 아이드림극장 건물 내에는 아이들을 위한 <strong>복합 문화 체험 공간</strong>이 마련되어 있습니다.</p>
+                <ul>
+                    <li><strong>주요 시설:</strong> 층별 테마 놀이터(정글짐, 블록), 요리 체험실, 창의 놀이존 등</li>
+                    <li><strong>이용 대상:</strong> 18개월 ~ 9세 이하 아동 및 보호자</li>
+                    <li><strong>팁:</strong> 공연 관람 전후에 가족과 함께 창의적인 놀이 시간을 가질 수 있습니다. (사전 예약 권장)</li>
+                </ul>
+                <a href="https://www.osanidream.or.kr/" class="action-button web-button" style="margin-top:10px; font-size: 0.85rem; padding: 10px;" target="_blank">
+                    🌐 오산아이드림센터 홈페이지 방문
+                </a>
+            </div>
         </section>
 
         <footer>

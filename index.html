@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>사운드포스트 정기 연주회 초대장</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
@@ -15,79 +15,84 @@
         body { margin: 0; padding: 0; background-color: var(--bg-color); font-family: 'Noto Serif KR', serif; color: var(--main-text); line-height: 1.6; touch-action: manipulation; }
         .container { max-width: 500px; margin: 0 auto; background: #fff; box-shadow: 0 0 30px rgba(0,0,0,0.05); }
 
-        /* --- [섹션 1: 스와이프 포스터 캐러셀 영역] --- */
+        /* --- [섹션 1: 스와이프 포스터 영역] --- */
         .poster-swiper-section { padding: 0; border: none; position: relative; }
-        
-        .mainSwiper { width: 100%; height: auto; aspect-ratio: 1 / 1.414; /* A4 포스터 비율 예시. 실제 비율에 맞춰 조정 가능 */ }
+        .mainSwiper { width: 100%; height: auto; aspect-ratio: 1 / 1.414; }
         .swiper-slide { display: flex; justify-content: center; align-items: center; overflow: hidden; }
-        .swiper-slide img { width: 100%; height: 100%; object-fit: cover; /* 칸에 꽉 차게 조절. 여백이 필요하면 'contain' 사용 */ }
+        .swiper-slide img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* 페이지네이션(점) 스타일 커스텀 */
         .swiper-pagination-bullet { background: rgba(0,0,0,0.3); opacity: 1; width: 8px; height: 8px; }
         .swiper-pagination-bullet-active { background: var(--accent-gold) !important; width: 24px; border-radius: 4px; transition: all 0.3s; }
         .swiper-pagination { bottom: 15px !important; }
 
-        /* --- [나머지 섹션 스타일 (기존 유지)] --- */
+        /* --- [섹션 2: Hero Title 영역 (신설)] --- */
+        .hero-title-section { text-align: center; padding: 50px 25px; background-color: #fff; border-bottom: 1px solid var(--divider); }
+        .hero-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.9rem; color: var(--accent-gold); letter-spacing: 3px; margin-bottom: 12px; font-weight: 600; text-transform: uppercase; }
+        .hero-title { font-size: 1.85rem; color: var(--navy-dark); margin: 0; line-height: 1.3; font-weight: 700; word-break: keep-all; }
+        .hero-date { font-family: 'Montserrat', sans-serif; font-size: 1.15rem; margin-top: 25px; font-weight: 300; color: #555; border-top: 1px solid #eee; display: inline-block; padding-top: 15px; }
+        .hero-venue { font-size: 1rem; color: #888; margin-top: 5px; }
+
+        /* --- [공통 섹션 스타일] --- */
         section { padding: 40px 25px; border-bottom: 1px solid var(--divider); }
         h2.section-title { font-size: 2rem; font-family: 'Montserrat', sans-serif; margin-bottom: 20px; color: #888; letter-spacing: 2px; }
 
         /* Greetings & Profile */
-        .greetings-text { margin-bottom: 40px; font-size: 0.95rem; }
+        .greetings-text { margin-bottom: 40px; font-size: 0.95rem; text-align: justify; }
         .conductor-wrap { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 30px; }
         .conductor-img { width: 100px; height: 130px; border-radius: 4px; flex-shrink: 0; background-color: #eee; }
         .conductor-info h4 { margin: 0; font-size: 1.1rem; color: var(--navy-dark); }
-        .conductor-info p { font-size: 0.85rem; color: #666; margin-top: 5px; }
+        .conductor-info p { font-size: 0.82rem; color: #666; margin: 3px 0; line-height: 1.4; }
 
         .player-list { border-top: 1px solid var(--divider); padding-top: 20px; }
         .player-row { display: flex; margin-bottom: 15px; font-size: 0.9rem; }
-        .player-row b { width: 60px; color: var(--navy-dark); flex-shrink: 0; }
+        .player-row b { width: 50px; color: var(--navy-dark); flex-shrink: 0; }
+        .player-row span { 
+            word-break: keep-all; /* 이름(단어) 중간에서 줄바꿈 방지 */
+            overflow-wrap: break-word;
+        }
+        .player-row span b { color: var(--accent-gold); }
 
-        /* Program Section */
+        /* --- [Program Section 개선] --- */
         .program-part { margin-bottom: 40px; }
-        .part-title { 
-            text-align: right; font-family: 'Montserrat', sans-serif; 
-            font-size: 1.5rem; margin-bottom: 20px; color: #555;
-        }
-        .program-item { margin-bottom: 25px; }
-        .item-main { display: flex; align-items: baseline; justify-content: space-between; }
-        .item-title { font-weight: 700; font-size: 1.05rem; white-space: nowrap; }
+        .part-title { text-align: right; font-family: 'Montserrat', sans-serif; font-size: 1.5rem; margin-bottom: 20px; color: #555; }
+        .program-item { margin-bottom: 30px; }
+        
+        .item-main { display: flex; align-items: flex-start; justify-content: space-between; position: relative; }
+        
+        .item-title-group { display: flex; flex-direction: column; max-width: 70%; }
+        .title-kor { font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: var(--main-text); }
+        .title-eng { font-size: 0.85rem; color: #777; font-family: 'Montserrat', sans-serif; margin-top: 2px; }
+        
         .item-dots { 
-            flex-grow: 1; border-bottom: 1px dotted #ccc; 
-            margin: 0 10px; position: relative; top: -4px; 
+            flex-grow: 1; 
+            border-bottom: 1px dotted #ccc; 
+            margin: 0 10px; 
+            position: relative; 
+            height: 1.2rem; /* 첫 줄 높이에 맞춰 점선 위치 고정 */
         }
-        .item-tempo { font-size: 0.85rem; color: #888; font-family: 'Montserrat', sans-serif; }
-        .item-sub { font-size: 0.85rem; color: #666; margin-top: 4px; text-align: right; }
-
-        .intermission { text-align: center; font-family: 'Montserrat', sans-serif; letter-spacing: 5px; color: #bbb; margin: 40px 0; }
-
-        /* Map & Info */
-        .info-box { text-align: center; padding: 20px 0px; }
-        .action-button {
-            display: block; padding: 16px; margin: 10px 0;
-            border-radius: 8px; text-decoration: none; font-weight: bold;
+        
+        .item-tempo { 
+            font-size: 0.85rem; 
+            color: #888; 
+            font-family: 'Montserrat', sans-serif; 
+            white-space: nowrap; 
+            padding-top: 2px;
         }
+        
+        .item-sub { font-size: 0.85rem; color: #666; margin-top: 6px; text-align: right; }
+
+        .intermission { text-align: center; font-family: 'Montserrat', sans-serif; letter-spacing: 5px; color: #bbb; margin: 50px 0; font-weight: 300; }
+
+        /* Information Section */
+        .info-section { padding: 40px 20px; text-align: center; }
+        .info-text h2 { font-size: 1.6rem; color: var(--navy-dark); margin-bottom: 10px; }
+        .action-button { display: block; padding: 16px; margin: 15px 0; border-radius: 8px; text-decoration: none; font-weight: bold; transition: 0.2s; }
         .map-btn { background: var(--navy-dark); color: #fff; }
         .web-btn { border: 1px solid var(--navy-dark); color: var(--navy-dark); }
 
-        /* 아이드림센터 정보 박스 */
-        .map-button { background-color: #3d2b1f; color: #fff; }
-        .web-button { background-color: #fff; color: #3d2b1f; border: 1px solid #3d2b1f; }
-
-        .center-info {
-            margin-top: 20px;
-            padding: 20px;
-            background-color: #f9f6f2;
-            border-radius: 15px;
-            text-align: left;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-
-        .center-info h3 {
-            margin-top: 0;
-            color: #d4af37;
-            font-size: 1.1rem;
-        }
+        .center-info { margin-top: 30px; padding: 20px; background-color: #f9f6f2; border-radius: 15px; text-align: left; font-size: 0.9rem; }
+        .center-info h3 { margin-top: 0; color: var(--accent-gold); font-size: 1.1rem; }
+        .center-info img { border-radius: 8px; margin: 10px 0; }
 
         footer { text-align: center; padding: 40px; font-size: 0.8rem; color: #aaa; background: #f9f9f9; }
     </style>
@@ -95,31 +100,34 @@
 <body>
 
     <div class="container">
+        <!-- 포스터 스와이프 -->
         <section class="poster-swiper-section">
             <div class="swiper mainSwiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <img src="poster.png" alt="Soundpost Concert Poster 1">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="profile.png" alt="Soundpost Concert Poster 2">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="program.png" alt="Soundpost Concert Poster 3">
-                    </div>
+                    <div class="swiper-slide"><img src="poster.png" alt="Poster 1"></div>
+                    <div class="swiper-slide"><img src="profile.png" alt="Poster 2"></div>
+                    <div class="swiper-slide"><img src="program.png" alt="Poster 3"></div>
                 </div>
-                
                 <div class="swiper-pagination"></div>
             </div>
         </section>
 
+        <!--Hero Title 섹션 -->
+        <section class="hero-title-section">
+            <p class="hero-subtitle">삼성전자 현악동호회</p>
+            <h1 class="hero-title">사운드 포스트 연주회</h1>
+            <p class="hero-date">2026. 03. 28 SAT 2 PM</p>
+            <p class="hero-venue">오산아이드림극장</p>
+        </section>
+
+        <!-- Greetings & Profile -->
         <section id="profile">
             <h2 class="section-title">Greetings</h2>
             <div class="greetings-text">
-                2013년 사내 런치 클래스의 작은 떨림으로 시작한 사운드포스트가 어느덧 일상과 예술을 잇는 든든한 '영혼의 기둥'으로 성장했습니다.<br>
-                음악을 사랑하는 비전공 직장인들이 틈틈이 갈고닦은 순수한 열정의 선율이 오늘 가족과 이웃 여러분의 마음에 따뜻한 소통의 울림으로 닿기를 소망합니다.<br>
+                2013년 사내 런치 클래스의 작은 떨림으로 시작한 사운드포스트가 어느덧 일상과 예술을 잇는 든든한 '영혼의 기둥'으로 성장했습니다.<br><br>
+                음악을 사랑하는 비전공 직장인들이 틈틈이 갈고닦은 순수한 열정의 선율이 오늘 가족과 이웃 여러분의 마음에 따뜻한 소통의 울림으로 닿기를 소망합니다.<br><br>
                 바쁘신 중에도 저희의 음악 여행에 기꺼이 동행해 주신 관객 여러분께 진심으로 감사의 인사를 올립니다.<br>
-                <b> 삼성전자 현악 동호회 사운드포스트 회장 정준희 드림</b><br>
+                <p style="text-align:right;"><b>삼성전자 현악 동호회 사운드포스트 회장 정준희 드림</b></p>
             </div>
 
             <h2 class="section-title">Profile</h2>
@@ -128,30 +136,31 @@
                 <div class="conductor-info">
                     <h4>지휘 | 석민지</h4>
                     <p>現 한양대학교 음악대학 재학</p>
-                    <p>성신여자대학교 아마추어 오케스트라 '크리스탈' 지휘자</p>
-                    <p>삼성전자 수원 현악오케스트라 '사운드포스트' 지휘자</p>
+                    <p>성신여대 '크리스탈' 지휘자</p>
+                    <p>삼성전자 '사운드포스트' 지휘자</p>
                     <p>삼성전자 수원 MLD 강의 출강</p>
-                    <p>前 예술단체 '아람아트' 오케스트라 부지휘자</p>
+                    <p>前 '아람아트' 오케스트라 부지휘자</p>
                 </div>
             </div>
 
             <div class="player-list">
                 <div class="player-row"><b>Vn</b>
                     <span><b>지도 선생님 | 김이진, 노성은, 이현희</b><br>
-                        정준희, 남승수, 김경록, 김정한, 문지현, 박지혜, 박혜진, 박희철, 봉우리, 손성필, 윤성욱, 이민희, 이승복, 전요셉, 조경숙, 조진경, 최용환</span>
+                    정준희, 남승수, 김경록, 김정한, 문지현, 박지혜, 박혜진, 박희철, 봉우리, 손성필, 윤성욱, 이민희, 이승복, 전요셉, 조경숙, 조진경, 최용환</span>
                 </div>
                 <div class="player-row"><b>Va</b>
                     <span><b>지도 선생님 | 송은서</b><br>
-                        정영교, 김정은, 김혜란, 변윤희, 한지훈</span>
+                    정영교, 김정은, 김혜란, 변윤희, 한지훈</span>
                 </div>
                 <div class="player-row"><b>Vc</b>
                     <span><b>지도 선생님 | 박선욱</b><br>
-                        정미영, 손승우, 안한철, 유장선, 정해석, 주윤우, 최지영</span>
+                    정미영, 손승우, 안한철, 유장선, 정해석, 주윤우, 최지영</span>
                 </div>
-                <div class="player-row"><b>Staff</b> <span>정지혜, 김선아, 성승민, 황성주</span></div>
+                <div class="player-row"><b>Staff</b> <span>정지혜 선생님, 김선아, 성승민, 황성주</span></div>
             </div>
         </section>
 
+        <!-- Program -->
         <section id="program">
             <h2 class="section-title">Program</h2>
             
@@ -160,41 +169,52 @@
                 
                 <div class="program-item">
                     <div class="item-main">
-                        <span class="item-title">1. 언제나 몇 번이라도 (Always With Me)</span>
+                        <div class="item-title-group">
+                            <span class="title-kor">1. 언제나 몇 번이라도</span>
+                            <span class="title-eng">Always With Me</span>
+                        </div>
                         <span class="item-dots"></span>
                         <span class="item-tempo">Andante, Vivace</span>
                     </div>
-                    <div class="item-sub">원곡 : 지브리 / 기무라 유미 (Kimura Yumi) | 편곡 : 석민지</div>
+                    <div class="item-sub">원곡 : 지브리 / 기무라 유미 | 편곡 : 석민지</div>
                 </div>
 
                 <div class="program-item">
                     <div class="item-main">
-                        <span class="item-title">2. 바람이 지나는 길 (Path of The Wind)</span>
+                        <div class="item-title-group">
+                            <span class="title-kor">2. 바람이 지나는 길</span>
+                            <span class="title-eng">Path of The Wind</span>
+                        </div>
                         <span class="item-dots"></span>
                         <span class="item-tempo">Andante, Vivace</span>
                     </div>
-                    <div class="item-sub">원곡 : 지브리 / 히사이시 조 (Hisaishi Joe) | 편곡 : 석민지</div>
+                    <div class="item-sub">원곡 : 지브리 / 히사이시 조 | 편곡 : 석민지</div>
                 </div>
 
                 <div class="program-item">
                     <div class="item-main">
-                        <span class="item-title">3. 또 다시 (Spirited Away Reprise)</span>
+                        <div class="item-title-group">
+                            <span class="title-kor">3. 또 다시</span>
+                            <span class="title-eng">Spirited Away Reprise</span>
+                        </div>
                         <span class="item-dots"></span>
                         <span class="item-tempo">Andante, Vivace</span>
                     </div>
-                    <div class="item-sub">원곡 : 지브리 / 히사이시 조 (Hisaishi Joe) | 편곡 : 석민지</div>
+                    <div class="item-sub">원곡 : 지브리 / 히사이시 조 | 편곡 : 석민지</div>
                 </div>
 
                 <div class="program-item">
                     <div class="item-main">
-                        <span class="item-title">4. 알라딘 메들리 (Aladdin Medley)</span>
+                        <div class="item-title-group">
+                            <span class="title-kor">4. 알라딘 메들리</span>
+                            <span class="title-eng">Aladdin Medley</span>
+                        </div>
                         <span class="item-dots"></span>
                         <span class="item-tempo">Andante, Vivace</span>
                     </div>
-                    <div class="item-sub">원곡 : 디즈니 / 알란 멘켄 (Alan Menken) | 편곡 : 석민지</div>
+                    <div class="item-sub">원곡 : 디즈니 / 알란 멘켄 | 편곡 : 석민지</div>
                 </div>
-
-                </div>
+            </div>
 
             <div class="intermission">INTERMISSION</div>
 
@@ -203,58 +223,62 @@
                 
                 <div class="program-item">
                     <div class="item-main">
-                        <span class="item-title">1. St. Paul's Suite</span>
+                        <div class="item-title-group">
+                            <span class="title-kor">1. 세인트 폴 모음곡</span>
+                            <span class="title-eng">St. Paul's Suite</span>
+                        </div>
                         <span class="item-dots"></span>
                         <span class="item-tempo">Vivace</span>
                     </div>
-                    <div class="item-sub">Gustav Holst</div>
+                    <div class="item-sub">작곡 : 구스타프 홀스트 (Gustav Holst)</div>
                 </div>
 
                 <div class="program-item">
                     <div class="item-main">
-                        <span class="item-title">2. Palladio</span>
+                        <div class="item-title-group">
+                            <span class="title-kor">2. 팔라디오</span>
+                            <span class="title-eng">Palladio</span>
+                        </div>
                         <span class="item-dots"></span>
                         <span class="item-tempo">Vivace</span>
                     </div>
-                    <div class="item-sub">Karl Jenkins</div>
+                    <div class="item-sub">작곡 : 칼 젠킨스 (Karl Jenkins)</div>
                 </div>
 
                 <div class="program-item">
                     <div class="item-main">
-                        <span class="item-title">3. kindersinfonie</span>
+                        <div class="item-title-group">
+                            <span class="title-kor">3. 장난감 교향곡</span>
+                            <span class="title-eng">Kindersinfonie</span>
+                        </div>
                         <span class="item-dots"></span>
                         <span class="item-tempo">Andante, Vivace</span>
                     </div>
-                    <div class="item-sub">L. Mozart / J. Haydn</div>
+                    <div class="item-sub">작곡 : L. 모차르트 / J. 하이든 (L. Mozart / J. Haydn)</div>
                 </div>
-                
-                </div>
+            </div>
         </section>
 
+        <!-- Information -->
         <section class="info-section">
             <div class="info-text">
                 <h2>공연장 안내</h2>
-                <p><strong>2026. 03. 28 (토) 오후 2시</strong><br>
-                오산아이드림극장</p>
+                <p><strong>2026. 03. 28 (토) 오후 2시</strong><br>오산아이드림극장</p>
             </div>
             
-            <div class="info-box">
-                <a href="https://m.place.naver.com/place/2018039723/location" class="action-button map-btn" target="_blank">📍 공연장 길찾기 (네이버 지도)</a>
+            <a href="https://m.place.naver.com/place/2018039723/location?filter=location&selected_place_id=2018039723" class="action-button map-btn" target="_blank">📍 공연장 길찾기 (네이버 지도)</a>
 
-                <div class="center-info">
-                <h3>💡 공연 전후로 즐기는 '오산아이드림센터'</h3>
+            <div class="center-info">
+                <h3>💡 공연 전후 즐길 거리</h3>
                 <img src="img_greeting.png" alt="아이드림센터 전경" style="max-width: 100%; height: auto;">
-                <p>공연이 열리는 아이드림극장 건물 내에는 아이들을 위한 <strong>복합 문화 체험 공간</strong>이 마련되어 있습니다.</p>
-                <ul>
-                    <li><strong>주요 시설:</strong> 층별 테마 놀이터(정글짐, 블록), 요리 체험실, 창의 놀이존 등</li>
-                    <li><strong>이용 대상:</strong> 18개월 ~ 9세 이하 아동 및 보호자</li>
-                    <li><strong>팁:</strong> 공연 관람 전후에 가족과 함께 창의적인 놀이 시간을 가질 수 있습니다. (사전 예약 권장)</li>
+                <p>건물 내에는 아이들을 위한 <strong>복합 문화 체험 공간</strong>이 마련되어 있습니다.</p>
+                <ul style="padding-left: 20px;">
+                    <li>주요 시설: 테마 놀이터, 요리 체험실, 창의 놀이존</li>
+                    <li>이용 대상: 18개월 ~ 9세 아동 및 보호자</li>
+                    <li>팁: 사전 예약 권장 (공연 전후 가족 나들이 추천)</li>
                 </ul>
-                </div>
-                <a href="https://www.osanidream.or.kr/" class="action-button web-btn" target="_blank">🌐 오산아이드림센터 홈페이지</a>
             </div>
-
-            
+            <a href="https://www.osanidream.or.kr/" class="action-button web-btn" target="_blank">🌐 오산아이드림센터 홈페이지</a>
         </section>
 
         <footer>
@@ -264,23 +288,12 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    
     <script>
-        // Audio Context 정책 대응 (이전 수정사항 유지)
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-        // Swiper 캐러셀 초기화
         const swiper = new Swiper('.mainSwiper', {
-            loop: true,               // 무한 루프
-            autoplay: {               // 자동 넘김
-                delay: 5000,          // 5초 간격
-                disableOnInteraction: false, // 사용자 조작 후에도 자동 넘김 유지
-            },
-            pagination: {             // 점 인디케이터 설정
-                el: '.swiper-pagination',
-                clickable: true,      // 점 클릭 시 이동 가능
-            },
-            keyboard: true,           // 키보드 화살표 지원 (PC)
+            loop: true,
+            autoplay: { delay: 5000, disableOnInteraction: false },
+            pagination: { el: '.swiper-pagination', clickable: true },
+            keyboard: true,
         });
     </script>
 </body>

@@ -29,6 +29,19 @@
             box-shadow: 0 0 30px rgba(0,0,0,0.05);
         }
 
+        /* --- [섹션 1: 스와이프 포스터 캐러셀 영역] --- */
+        .poster-swiper-section { padding: 0; border: none; position: relative; }
+        
+        .mainSwiper { width: 100%; height: auto; aspect-ratio: 1 / 1.414; /* A4 포스터 비율 예시. 실제 비율에 맞춰 조정 가능 */ }
+        .swiper-slide { display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        .swiper-slide img { width: 100%; height: 100%; object-fit: cover; /* 칸에 꽉 차게 조절. 여백이 필요하면 'contain' 사용 */ }
+        
+        /* 페이지네이션(점) 스타일 커스텀 */
+        .swiper-pagination-bullet { background: rgba(0,0,0,0.3); opacity: 1; width: 8px; height: 8px; }
+        .swiper-pagination-bullet-active { background: var(--accent-gold) !important; width: 24px; border-radius: 4px; transition: all 0.3s; }
+        .swiper-pagination { bottom: 15px !important; }
+
+        /* --- [나머지 섹션 스타일 (기존 유지)] --- */
         section { padding: 40px 25px; border-bottom: 1px solid var(--divider); }
         h2.section-title { 
             font-size: 2rem; font-family: 'Montserrat', sans-serif; 
@@ -36,10 +49,12 @@
         }
 
         /* 메인 포스터 영역 */
-        .poster-section { padding: 0; border: none; }
-        .poster-section img { width: 100%; display: block; }
+        /*.poster-section { padding: 0; border: none; }
+        .poster-section img { width: 100%; display: block; }*/
 
         /* Greetings & Profile */
+        section { padding: 40px 25px; border-bottom: 1px solid var(--divider); }
+        h2.section-title { font-size: 2rem; font-family: 'Montserrat', sans-serif; margin-bottom: 20px; color: #888; letter-spacing: 2px; }
         .greetings-text { margin-bottom: 40px; font-size: 0.95rem; }
         .conductor-wrap { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 30px; }
         .conductor-img { width: 100px; height: 130px; background: #ccc; border-radius: 4px; flex-shrink: 0; }
@@ -83,8 +98,22 @@
 <body>
 
     <div class="container">
-        <section class="poster-section">
-            <img src="poster.png" alt="Soundpost Concert 2026">
+        <section class="poster-swiper-section">
+            <div class="swiper mainSwiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="poster.png" alt="Soundpost Concert Poster 1">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="profile.png" alt="Soundpost Concert Poster 2">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="program.png" alt="Soundpost Concert Poster 3">
+                    </div>
+                </div>
+                
+                <div class="swiper-pagination"></div>
+            </div>
         </section>
 
         <section id="profile">
@@ -219,6 +248,27 @@
             Samsung Electronics Amateur String Club
         </footer>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
+    <script>
+        // Audio Context 정책 대응 (이전 수정사항 유지)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Swiper 캐러셀 초기화
+        const swiper = new Swiper('.mainSwiper', {
+            loop: true,               // 무한 루프
+            autoplay: {               // 자동 넘김
+                delay: 5000,          // 5초 간격
+                disableOnInteraction: false, // 사용자 조작 후에도 자동 넘김 유지
+            },
+            pagination: {             // 점 인디케이터 설정
+                el: '.swiper-pagination',
+                clickable: true,      // 점 클릭 시 이동 가능
+            },
+            keyboard: true,           // 키보드 화살표 지원 (PC)
+        });
+    </script>
 
 </body>
 </html>

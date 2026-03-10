@@ -45,7 +45,6 @@
         .chevron-icon { width: 12px; height: 12px; fill: none; stroke: var(--accent-gold); stroke-width: 2.5; margin-left: 8px; transition: transform 0.3s; }
         .d-day-capsule.expanded .chevron-icon { transform: rotate(180deg); }
 
-        /* 공통 버튼 스타일 */
         .btn-action { 
             background-color: var(--navy-dark); color: white; border: none; 
             padding: 14px 40px; border-radius: 50px; font-weight: bold; 
@@ -65,6 +64,12 @@
 
         /* Greetings & Profile */
         .greetings-text { font-size: 1rem; text-align: justify; margin-bottom: 50px; }
+        
+        /* 서명 스타일 수정 */
+        .signature-wrap { text-align: right; margin-top: 20px; }
+        .sig-part { display: inline-block; }
+        .sig-name { white-space: nowrap; }
+
         .conductor-wrap { display: flex; gap: 25px; align-items: flex-start; margin-bottom: 40px; }
         .conductor-img { width: 120px; height: 155px; border-radius: 4px; flex-shrink: 0; background-color: #eee; }
         .conductor-info h4 { margin: 0; font-size: 1.2rem; color: var(--navy-dark); }
@@ -200,7 +205,7 @@
                     </div>
                     <svg class="chevron-icon" viewBox="0 0 10 10"><path d="M2 3l3 3 3-3"/></svg>
                 </div>
-                <!-- 상단 RSVP 버튼 추가 -->
+                <!-- 상단 RSVP 버튼 -->
                 <button class="btn-action" onclick="openModal()">참석 회신하기</button>
             </div>
 
@@ -217,7 +222,11 @@
                 2013년 사내 런치 클래스의 작은 떨림으로 시작한 사운드포스트가 일상과 예술을 잇는 든든한 '영혼의 기둥'으로 성장했습니다.<br><br>
                 음악을 사랑하는 비전공 직장인들이 틈틈이 갈고닦은 순수한 열정의 선율이 오늘 가족과 이웃 여러분의 마음에 따뜻한 소통의 울림으로 닿기를 소망합니다.<br><br>
                 바쁘신 중에도 저희의 음악 여행에 기꺼이 동행해 주신 관객 여러분께 진심으로 감사의 인사를 올립니다.<br>
-                <p style="text-align:right;">삼성전자 현악 동호회 사운드포스트 회장 <b>정준희 드림</b></p>
+                <!-- 서명 영역 수정: inline-block과 nowrap 적용 -->
+                <div class="signature-wrap">
+                    <span class="sig-part">삼성전자 현악 동호회 사운드포스트 회장&nbsp;</span>
+                    <span class="sig-part sig-name"><b>정준희 드림</b></span>
+                </div>
             </div>
 
             <h2 class="section-title">Profile</h2>

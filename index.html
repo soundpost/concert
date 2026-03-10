@@ -201,6 +201,18 @@
 
             .notice-grid { grid-template-columns: repeat(4, 1fr); }
         }
+
+        /* --- [가로가 긴 화면 대응: 포스터 높이 90% 제한] --- */
+        @media (min-width: 800px) and (orientation: landscape) {
+            .mainSwiper { height: 90vh; background-color: #000; }
+            .swiper-slide { background-color: #000; }
+            .swiper-slide img { 
+                height: 90vh; 
+                width: auto; 
+                margin: 0 auto; 
+                object-fit: contain; 
+            }
+        }
     </style>
 </head>
 <body>
@@ -548,21 +560,18 @@
                 message: document.getElementById('rsvpMessage').value
             };
 
-            // fetch는 비동기이므로 .then() 블록이 정상적으로 실행되어야 팝업이 뜹니다.
             fetch(SCRIPT_URL, {
                 method: 'POST',
                 body: JSON.stringify(formData),
                 mode: 'no-cors'
             })
             .then(() => {
-                // 전송 성공 시 커스텀 모달 띄우기
                 openSuccessModal(name);
                 document.getElementById('rsvpForm').reset();
                 closeModal();
             })
             .catch(error => {
                 console.error('Error:', error);
-                // 에러 상황에서도 사용자에게 알림을 주는 것이 좋습니다.
                 document.getElementById('successMessage').innerText = "죄송합니다. 등록 중 오류가 발생했습니다. 다시 시도해 주세요.";
                 document.getElementById('successModal').style.display = 'flex';
             })

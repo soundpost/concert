@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>사운드포스트연주회 초대장</title>
+    <title>사운드포스트 연주회 초대장</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
     <style>
@@ -14,7 +14,7 @@
         }
 
         body { margin: 0; padding: 0; background-color: #f0f0f0; font-family: 'Noto Serif KR', serif; color: var(--main-text); line-height: 1.6; touch-action: manipulation; }
-        .container { max-width: var(--container-max); margin: 0 auto; background: #fff; box-shadow: 0 0 50px rgba(0,0,0,0.1); min-height: 100vh; }
+        .container { max-width: var(--container-max); margin: 0 auto; background: #fff; box-shadow: 0 0 50px rgba(0,0,0,0.1); min-height: 100vh; position: relative; }
 
         /* --- [섹션 1: 포스터 스와이프] --- */
         .poster-swiper-section { padding: 0; border: none; position: relative; background-color: #000; }
@@ -28,7 +28,7 @@
         .hero-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.85rem; color: var(--accent-gold); letter-spacing: 3px; margin-bottom: 12px; font-weight: 600; text-transform: uppercase; }
         .hero-title { font-size: 1.85rem; color: var(--navy-dark); margin: 0; line-height: 1.3; font-weight: 700; word-break: keep-all; }
         
-        .d-day-wrapper { margin-top: 25px; display: flex; justify-content: center; }
+        .d-day-wrapper { margin-top: 25px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
         .d-day-capsule {
             display: flex; align-items: center; padding: 10px 18px;
             background-color: var(--bg-color); border: 1px solid var(--accent-gold);
@@ -44,6 +44,16 @@
         .timer-unit-label { font-size: 0.7rem; color: #888; }
         .chevron-icon { width: 12px; height: 12px; fill: none; stroke: var(--accent-gold); stroke-width: 2.5; margin-left: 8px; transition: transform 0.3s; }
         .d-day-capsule.expanded .chevron-icon { transform: rotate(180deg); }
+
+        /* 공통 버튼 스타일 */
+        .btn-action { 
+            background-color: var(--navy-dark); color: white; border: none; 
+            padding: 14px 40px; border-radius: 50px; font-weight: bold; 
+            font-size: 1rem; cursor: pointer; transition: 0.3s; 
+            box-shadow: 0 4px 15px rgba(26, 42, 68, 0.2);
+            font-family: 'Noto Serif KR', serif;
+        }
+        .btn-action:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26, 42, 68, 0.3); background-color: #253a5e; }
 
         .hero-info-group { margin-top: 25px; }
         .hero-date { font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #444; margin: 0; }
@@ -65,7 +75,7 @@
         .player-row b { width: 55px; color: var(--navy-dark); flex-shrink: 0; }
         .player-row span { word-break: keep-all; }
 
-        /* --- [Program Section - 그리드 레이아웃 고도화] --- */
+        /* --- [Program Section] --- */
         .program-container { 
             display: grid; 
             grid-template-areas: 
@@ -88,57 +98,75 @@
         .item-tempo { font-size: 0.85rem; color: #888; font-family: 'Montserrat', sans-serif; white-space: nowrap; padding-top: 2px; }
         .item-sub { font-size: 0.85rem; color: #666; margin-top: 6px; text-align: right; }
 
+        /* --- [참석 확인 섹션] --- */
+        .attendance-section { 
+            background-color: var(--bg-color); 
+            text-align: center; 
+            padding: 60px 30px;
+            border-bottom: 1px solid var(--divider);
+        }
+        .attendance-text { font-size: 1.05rem; color: #666; margin-bottom: 25px; word-break: keep-all; }
+
         /* Information Section */
         .info-grid { display: grid; grid-template-columns: 1fr; gap: 40px; }
         .info-main h2 { font-size: 1.8rem; color: var(--navy-dark); margin-bottom: 15px; }
-        .action-button { display: block; padding: 16px; border-radius: 8px; text-decoration: none; font-weight: bold; text-align: center; }
-        .map-btn { background: var(--navy-dark); color: #fff; margin-bottom: 10px; }
+        .action-button { display: block; padding: 16px; border-radius: 8px; text-decoration: none; font-weight: bold; text-align: center; margin-bottom: 10px; }
+        .map-btn { background: var(--navy-dark); color: #fff; }
         .web-btn { border: 1px solid var(--navy-dark); color: var(--navy-dark); }
         .center-info { padding: 25px; background-color: #f9f6f2; border-radius: 15px; font-size: 0.95rem; }
         .center-info h3 { margin-top: 0; color: var(--accent-gold); font-size: 1.1rem; }
 
+        /* --- [모달 스타일] --- */
+        .modal-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.7); display: none; justify-content: center; 
+            align-items: center; z-index: 2000; backdrop-filter: blur(5px);
+        }
+        .modal-content { 
+            background: #fff; width: 90%; max-width: 450px; padding: 40px; 
+            border-radius: 20px; position: relative; box-sizing: border-box;
+            animation: modalSlideUp 0.4s ease;
+        }
+        @keyframes modalSlideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .modal-close { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; color: #aaa; border: none; background: none; }
+        .modal-title { font-size: 1.8rem; color: var(--navy-dark); margin-bottom: 10px; text-align: center; font-weight: 700; }
+        .modal-subtitle { font-size: 0.95rem; color: #666; text-align: center; margin-bottom: 30px; word-break: keep-all; }
+
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 8px; color: #555; }
+        .form-input { 
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; 
+            box-sizing: border-box; font-family: inherit; font-size: 1rem;
+        }
+        .form-input:focus { outline: none; border-color: var(--accent-gold); }
+        .btn-submit { 
+            width: 100%; background: var(--navy-dark); color: #fff; border: none; 
+            padding: 15px; border-radius: 8px; font-weight: bold; font-size: 1.1rem; 
+            cursor: pointer; margin-top: 10px; transition: 0.3s;
+        }
+        .btn-submit:hover { background-color: var(--accent-gold); }
+
         footer { text-align: center; padding: 60px 30px; font-size: 0.85rem; color: #aaa; background: #fafafa; }
 
-        /* --- [태블릿 및 대화면 대응 미디어 쿼리] --- */
+        /* --- [미디어 쿼리] --- */
         @media (min-width: 800px) {
             section { padding: 80px 60px; }
             .hero-title { font-size: 2.8rem; }
             .hero-date { font-size: 1.5rem; }
-
-            /* 연주자 명단 2단 */
             .player-list { grid-template-columns: 1fr 1fr; column-gap: 40px; }
-
-            /* 프로그램 좌우 배치 및 인터미션 제거 */
             .program-container { 
-                grid-template-areas: 
-                    "part1 part2";
-                column-gap: 80px;
-                position: relative;
+                grid-template-areas: "part1 part2"; 
+                column-gap: 80px; position: relative;
             }
-            .intermission { display: none; } /* 넓은 화면에서 인터미션 숨김 */
-
-            /* 중앙 세로선 효과 */
-            .program-container::after {
-                content: "";
-                position: absolute;
-                top: 50px; bottom: 0; left: 50%;
-                width: 1px; background-color: var(--divider);
-            }
-
-            /* 정보 섹션 좌우 배치 */
+            .intermission { display: none; }
+            .program-container::after { content: ""; position: absolute; top: 50px; bottom: 0; left: 50%; width: 1px; background-color: var(--divider); }
             .info-grid { grid-template-columns: 1fr 1.2fr; align-items: center; }
         }
 
-        /* --- [가로 모드 포스터 높이 조절] --- */
         @media (min-width: 800px) and (orientation: landscape) {
-            .mainSwiper {
-                height: 80vh; /* 화면 높이의 80%로 제한 */
-            }
-            .swiper-slide img {
-                height: 100%;
-                width: auto; /* 비율 유지하며 높이에 맞춤 */
-                margin: 0 auto;
-            }
+            .mainSwiper { height: 80vh; }
+            .swiper-slide img { height: 100%; width: auto; margin: 0 auto; }
         }
     </style>
 </head>
@@ -149,18 +177,18 @@
         <section class="poster-swiper-section">
             <div class="swiper mainSwiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide"><img src="poster.png" alt="Poster 1"></div>
-                    <div class="swiper-slide"><img src="profile.png" alt="Poster 2"></div>
-                    <div class="swiper-slide"><img src="program.png" alt="Poster 3"></div>
+                    <div class="swiper-slide"><img src="poster.png" alt="포스터 1"></div>
+                    <div class="swiper-slide"><img src="profile.png" alt="포스터 2"></div>
+                    <div class="swiper-slide"><img src="program.png" alt="포스터 3"></div>
                 </div>
                 <div class="swiper-pagination"></div>
             </div>
         </section>
 
-        <!-- 2. Hero Title & D-Day -->
+        <!-- 2. Hero Title & D-Day & RSVP -->
         <section class="hero-title-section">
             <p class="hero-subtitle">삼성전자 현악 동호회</p>
-            <h1 class="hero-title">사운드포스트 연주회</h1>
+            <h1 class="hero-title">사운드포스트 정기 연주회</h1>
             
             <div class="d-day-wrapper">
                 <div id="d-day-capsule" class="d-day-capsule" onclick="toggleDDay()">
@@ -172,6 +200,8 @@
                     </div>
                     <svg class="chevron-icon" viewBox="0 0 10 10"><path d="M2 3l3 3 3-3"/></svg>
                 </div>
+                <!-- 상단 RSVP 버튼 추가 -->
+                <button class="btn-action" onclick="openModal()">참석 회신하기</button>
             </div>
 
             <div class="hero-info-group">
@@ -220,14 +250,12 @@
             </div>
         </section>
 
-        <!-- 4. Program (태블릿에서 인터미션 숨김 적용) -->
+        <!-- 4. Program -->
         <section id="program">
             <h2 class="section-title">Program</h2>
             <div class="program-container">
-                <!-- 1부 -->
                 <div class="program-part p1">
                     <div class="part-title">Part 1</div>
-
                     <div class="program-item">
                         <div class="item-main">
                             <div class="item-title-group">
@@ -235,11 +263,10 @@
                                 <span class="title-eng">Always With Me</span>
                             </div>
                             <span class="item-dots"></span>
-                            <span class="item-tempo">Andante, Vivace</span>
+                            <span class="item-tempo">Andante</span>
                         </div>
                         <div class="item-sub">원곡 : 지브리 / 기무라 유미 | 편곡 : 석민지</div>
                     </div>
-    
                     <div class="program-item">
                         <div class="item-main">
                             <div class="item-title-group">
@@ -247,11 +274,10 @@
                                 <span class="title-eng">Path of The Wind</span>
                             </div>
                             <span class="item-dots"></span>
-                            <span class="item-tempo">Andante, Vivace</span>
+                            <span class="item-tempo">Andante</span>
                         </div>
                         <div class="item-sub">원곡 : 지브리 / 히사이시 조 | 편곡 : 석민지</div>
                     </div>
-    
                     <div class="program-item">
                         <div class="item-main">
                             <div class="item-title-group">
@@ -259,31 +285,16 @@
                                 <span class="title-eng">Spirited Away Reprise</span>
                             </div>
                             <span class="item-dots"></span>
-                            <span class="item-tempo">Andante, Vivace</span>
+                            <span class="item-tempo">Andante</span>
                         </div>
                         <div class="item-sub">원곡 : 지브리 / 히사이시 조 | 편곡 : 석민지</div>
                     </div>
-    
-                    <div class="program-item">
-                        <div class="item-main">
-                            <div class="item-title-group">
-                                <span class="title-kor">4. 알라딘 메들리</span>
-                                <span class="title-eng">Aladdin Medley</span>
-                            </div>
-                            <span class="item-dots"></span>
-                            <span class="item-tempo">Andante, Vivace</span>
-                        </div>
-                        <div class="item-sub">원곡 : 디즈니 / 알란 멘켄 | 편곡 : 석민지</div>
-                    </div>
                 </div>
 
-                <!-- 인터미션 (모바일에서만 보임) -->
                 <div class="intermission">INTERMISSION</div>
 
-                <!-- 2부 -->
                 <div class="program-part p2">
                     <div class="part-title">Part 2</div>
-
                     <div class="program-item">
                         <div class="item-main">
                             <div class="item-title-group">
@@ -293,9 +304,8 @@
                             <span class="item-dots"></span>
                             <span class="item-tempo">Vivace</span>
                         </div>
-                        <div class="item-sub">작곡 : 구스타프 홀스트 (Gustav Holst)</div>
+                        <div class="item-sub">작곡 : 구스타프 홀스트</div>
                     </div>
-    
                     <div class="program-item">
                         <div class="item-main">
                             <div class="item-title-group">
@@ -305,47 +315,61 @@
                             <span class="item-dots"></span>
                             <span class="item-tempo">Vivace</span>
                         </div>
-                        <div class="item-sub">작곡 : 칼 젠킨스 (Karl Jenkins)</div>
-                    </div>
-    
-                    <div class="program-item">
-                        <div class="item-main">
-                            <div class="item-title-group">
-                                <span class="title-kor">3. 장난감 교향곡</span>
-                                <span class="title-eng">Kinder-Sinfonie</span>
-                            </div>
-                            <span class="item-dots"></span>
-                            <span class="item-tempo">Andante, Vivace</span>
-                        </div>
-                        <div class="item-sub">작곡 : L. 모차르트 / J. 하이든 (L. Mozart / J. Haydn)</div>
+                        <div class="item-sub">작곡 : 칼 젠킨스</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 5. Information -->
+        <!-- 5. 참석 확인 섹션 (중간 위치) -->
+        <section class="attendance-section">
+            <div class="attendance-text">연주회에 소중한 발걸음을 해주실 분들의<br>참석 여부를 미리 알려주시면 큰 도움이 됩니다.</div>
+            <button class="btn-action" onclick="openModal()">참석 회신하기</button>
+        </section>
+
+        <!-- 6. Information -->
         <section class="info-section">
             <h2 class="section-title" style="text-align:center;">Information</h2>
             <div class="info-grid">
                 <div class="info-main">
                     <h2>공연장 안내</h2>
                     <p><strong>2026. 03. 28 (토) 오후 2시</strong><br>오산아이드림극장</p>
-                    <a href="https://m.place.naver.com/place/2018039723/location" class="action-button map-btn" target="_blank">📍 네이버 지도 길찾기</a>
+                    <a href="https://m.place.naver.com/place/2018039723/location?filter=location&selected_place_id=2018039723" class="action-button map-btn" target="_blank">📍 네이버 지도 길찾기</a>
                     <a href="https://www.osanidream.or.kr/" class="action-button web-btn" target="_blank">🌐 아이드림센터 홈페이지</a>
                 </div>
 
                 <div class="center-info">
                     <h3>💡 공연 전후 즐길 거리</h3>
                     <img src="img_greeting.png" alt="아이드림센터 전경" style="max-width: 100%; border-radius: 10px; margin-bottom: 15px;">
-                    <p>건물 내에는 아이들을 위한 <strong>복합 문화 체험 공간</strong>이 마련되어 있습니다.</p>
-                    <ul style="padding-left: 20px; font-size: 0.85rem;">
-                        <li>주요 시설: 테마 놀이터, 요리 체험실, 창의 놀이존</li>
-                        <li>이용 대상: 18개월 ~ 9세 아동 및 보호자</li>
-                        <li>팁: 사전 예약 권장 (공연 전후 가족 나들이 추천)</li>
-                    </ul>
+                    <p>건물 내 <strong>복합 문화 체험 공간</strong>을 이용해 보세요.</p>
                 </div>
             </div>
         </section>
+
+        <!-- 참석 등록 모달창 -->
+        <div id="rsvpModal" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <button class="modal-close" onclick="closeModal(event)">&times;</button>
+                <h2 class="modal-title">참석 등록</h2>
+                <p class="modal-subtitle">연주회에 오시는 분들의 성함을 알려주세요.</p>
+                
+                <form id="rsvpForm">
+                    <div class="form-group">
+                        <label class="form-label">성함</label>
+                        <input type="text" id="rsvpName" class="form-input" placeholder="성함을 입력해 주세요" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">동반 인원 (본인 포함)</label>
+                        <input type="number" id="rsvpCount" class="form-input" value="1" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">응원 메시지 (선택)</label>
+                        <textarea id="rsvpMessage" class="form-input" rows="3" placeholder="단원들에게 응원의 한마디를 남겨주세요"></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">등록 완료</button>
+                </form>
+            </div>
+        </div>
 
         <footer>
             &copy; 2026 Soundpost String Orchestra.
@@ -354,12 +378,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
+        // Swiper 초기화
         const swiper = new Swiper('.mainSwiper', {
             loop: true, autoplay: { delay: 5000 },
             pagination: { el: '.swiper-pagination', clickable: true }
         });
 
-        // D-Day Logic
+        // D-Day 로직
         const targetDate = new Date("March 28, 2026 14:00:00").getTime();
         function toggleDDay() { document.getElementById('d-day-capsule').classList.toggle('expanded'); }
         function updateCountdown() {
@@ -377,6 +402,19 @@
             document.getElementById("s-val").innerHTML = `${String(s).padStart(2,'0')}<span class="timer-unit-label">s</span>`;
         }
         updateCountdown(); setInterval(updateCountdown, 1000);
+
+        // 모달 제어
+        function openModal() { document.getElementById('rsvpModal').style.display = 'flex'; }
+        function closeModal(e) { document.getElementById('rsvpModal').style.display = 'none'; }
+
+        // 폼 제출 핸들러
+        document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('rsvpName').value;
+            const count = document.getElementById('rsvpCount').value;
+            alert(`${name}님, 총 ${count}분의 참석 등록이 완료되었습니다. 감사합니다!`);
+            closeModal();
+        });
     </script>
 </body>
 </html>

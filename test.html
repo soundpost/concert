@@ -4,291 +4,323 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>사운드포스트 정기 연주회 초대장</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #fdfbf7;
-            --main-text: #333;
-            --accent-gold: #d4af37;
-            --navy-dark: #1a2a44;
-            --divider: #e0e0e0;
+            --bg-color: #fdfbf7; --main-text: #333; --accent-gold: #d4af37;
+            --navy-dark: #1a2a44; --divider: #e0e0e0;
+            --container-max: 1000px; 
         }
 
-        body {
-            margin: 0; padding: 0;
-            background-color: var(--bg-color);
-            font-family: 'Noto Serif KR', serif;
-            color: var(--main-text);
-            line-height: 1.6;
-        }
+        body { margin: 0; padding: 0; background-color: #f0f0f0; font-family: 'Noto Serif KR', serif; color: var(--main-text); line-height: 1.6; touch-action: manipulation; }
+        .container { max-width: var(--container-max); margin: 0 auto; background: #fff; box-shadow: 0 0 50px rgba(0,0,0,0.1); min-height: 100vh; }
 
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            background: #fff;
-            box-shadow: 0 0 30px rgba(0,0,0,0.05);
-        }
-
-        /* --- [섹션 1: 스와이프 포스터 캐러셀 영역] --- */
+        /* --- [섹션 1: 포스터 스와이프] --- */
         .poster-swiper-section { padding: 0; border: none; position: relative; }
-        
-        .mainSwiper { width: 100%; height: auto; aspect-ratio: 1 / 1.414; /* A4 포스터 비율 예시. 실제 비율에 맞춰 조정 가능 */ }
-        .swiper-slide { display: flex; justify-content: center; align-items: center; overflow: hidden; }
-        .swiper-slide img { width: 100%; height: 100%; object-fit: cover; /* 칸에 꽉 차게 조절. 여백이 필요하면 'contain' 사용 */ }
-        
-        /* 페이지네이션(점) 스타일 커스텀 */
-        .swiper-pagination-bullet { background: rgba(0,0,0,0.3); opacity: 1; width: 8px; height: 8px; }
+        .mainSwiper { width: 100%; height: auto; }
+        .swiper-slide img { width: 100%; height: auto; display: block; }
         .swiper-pagination-bullet-active { background: var(--accent-gold) !important; width: 24px; border-radius: 4px; transition: all 0.3s; }
-        .swiper-pagination { bottom: 15px !important; }
 
-        /* --- [나머지 섹션 스타일 (기존 유지)] --- */
-        section { padding: 40px 25px; border-bottom: 1px solid var(--divider); }
-        h2.section-title { 
-            font-size: 2rem; font-family: 'Montserrat', sans-serif; 
-            margin-bottom: 20px; color: #888; letter-spacing: 2px;
+        /* --- [섹션 2: Hero Title & D-Day] --- */
+        .hero-title-section { text-align: center; padding: 60px 25px; background-color: #fff; border-bottom: 1px solid var(--divider); }
+        .hero-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.85rem; color: var(--accent-gold); letter-spacing: 3px; margin-bottom: 12px; font-weight: 600; text-transform: uppercase; }
+        .hero-title { font-size: 1.85rem; color: var(--navy-dark); margin: 0; line-height: 1.3; font-weight: 700; word-break: keep-all; }
+        
+        .d-day-wrapper { margin-top: 25px; display: flex; justify-content: center; }
+        .d-day-capsule {
+            display: flex; align-items: center; padding: 10px 18px;
+            background-color: var(--bg-color); border: 1px solid var(--accent-gold);
+            border-radius: 50px; cursor: pointer; user-select: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: fit-content; gap: 0; overflow: hidden;
         }
+        #d-day-label { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--navy-dark); font-size: 1.15rem; white-space: nowrap; }
+        .timer-detail { max-width: 0; opacity: 0; display: flex; gap: 8px; align-items: baseline; transition: all 0.4s ease; }
+        .d-day-capsule.expanded { padding: 10px 22px; gap: 12px; }
+        .d-day-capsule.expanded .timer-detail { max-width: 250px; opacity: 1; padding-left: 12px; border-left: 1px solid #ddd; }
+        .detail-unit { font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 600; color: var(--navy-dark); }
+        .timer-unit-label { font-size: 0.7rem; color: #888; }
+        .chevron-icon { width: 12px; height: 12px; fill: none; stroke: var(--accent-gold); stroke-width: 2.5; margin-left: 8px; transition: transform 0.3s; }
+        .d-day-capsule.expanded .chevron-icon { transform: rotate(180deg); }
 
-        /* 메인 포스터 영역 */
-        /*.poster-section { padding: 0; border: none; }
-        .poster-section img { width: 100%; display: block; }*/
+        .hero-info-group { margin-top: 25px; }
+        .hero-date { font-family: 'Montserrat', sans-serif; font-size: 1.2rem; color: #444; margin: 0; }
+        .hero-venue { font-size: 1rem; color: #888; margin-top: 2px; }
+
+        /* --- [공통 섹션] --- */
+        section { padding: 60px 30px; border-bottom: 1px solid var(--divider); }
+        h2.section-title { font-size: 2.2rem; font-family: 'Montserrat', sans-serif; margin-bottom: 30px; color: #ddd; letter-spacing: 3px; font-weight: 300; }
 
         /* Greetings & Profile */
-        section { padding: 40px 25px; border-bottom: 1px solid var(--divider); }
-        h2.section-title { font-size: 2rem; font-family: 'Montserrat', sans-serif; margin-bottom: 20px; color: #888; letter-spacing: 2px; }
-        .greetings-text { margin-bottom: 40px; font-size: 0.95rem; }
-        .conductor-wrap { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 30px; }
-        .conductor-img { width: 100px; height: 130px; background: #ccc; border-radius: 4px; flex-shrink: 0; }
-        .conductor-info h4 { margin: 0; font-size: 1.1rem; color: var(--navy-dark); }
-        .conductor-info p { font-size: 0.85rem; color: #666; margin-top: 5px; }
+        .greetings-text { font-size: 1rem; text-align: justify; margin-bottom: 50px; }
+        .conductor-wrap { display: flex; gap: 25px; align-items: flex-start; margin-bottom: 40px; }
+        .conductor-img { width: 120px; height: 155px; border-radius: 4px; flex-shrink: 0; background-color: #eee; }
+        .conductor-info h4 { margin: 0; font-size: 1.2rem; color: var(--navy-dark); }
+        .conductor-info p { font-size: 0.85rem; color: #666; margin: 4px 0; line-height: 1.4; }
 
-        .player-list { border-top: 1px solid var(--divider); padding-top: 20px; }
-        .player-row { display: flex; margin-bottom: 15px; font-size: 0.9rem; }
-        .player-row b { width: 60px; color: var(--navy-dark); }
+        .player-list { border-top: 1px solid var(--divider); padding-top: 30px; display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .player-row { display: flex; font-size: 0.95rem; }
+        .player-row b { width: 55px; color: var(--navy-dark); flex-shrink: 0; }
+        .player-row span { word-break: keep-all; }
 
-        /* Program Section */
-        .program-part { margin-bottom: 40px; }
-        .part-title { 
-            text-align: right; font-family: 'Montserrat', sans-serif; 
-            font-size: 1.5rem; margin-bottom: 20px; color: #555;
+        /* --- [Program Section - 그리드 레이아웃 고도화] --- */
+        .program-container { 
+            display: grid; 
+            grid-template-areas: 
+                "part1"
+                "inter"
+                "part2";
+            gap: 20px;
         }
-        .program-item { margin-bottom: 25px; }
-        .item-main { display: flex; align-items: baseline; justify-content: space-between; }
-        .item-title { font-weight: 700; font-size: 1.05rem; white-space: nowrap; }
-        .item-dots { 
-            flex-grow: 1; border-bottom: 1px dotted #ccc; 
-            margin: 0 10px; position: relative; top: -4px; 
-        }
-        .item-tempo { font-size: 0.85rem; color: #888; font-family: 'Montserrat', sans-serif; }
-        .item-sub { font-size: 0.85rem; color: #666; margin-top: 4px; text-align: right; }
+        .program-part.p1 { grid-area: part1; }
+        .program-part.p2 { grid-area: part2; }
+        .intermission { grid-area: inter; text-align: center; font-family: 'Montserrat', sans-serif; letter-spacing: 5px; color: #bbb; margin: 30px 0; font-weight: 300; font-size: 1.1rem; }
 
-        .intermission { text-align: center; font-family: 'Montserrat', sans-serif; letter-spacing: 5px; color: #bbb; margin: 40px 0; }
+        .part-title { font-family: 'Montserrat', sans-serif; font-size: 1.6rem; margin-bottom: 25px; color: #555; border-bottom: 1px solid var(--bg-color); padding-bottom: 10px; }
+        .program-item { margin-bottom: 30px; }
+        .item-main { display: flex; align-items: flex-start; justify-content: space-between; }
+        .item-title-group { display: flex; flex-direction: column; max-width: 70%; }
+        .title-kor { font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: var(--main-text); }
+        .title-eng { font-size: 0.85rem; color: #777; font-family: 'Montserrat', sans-serif; margin-top: 2px; }
+        .item-dots { flex-grow: 1; border-bottom: 1px dotted #ccc; margin: 0 10px; height: 1.2rem; }
+        .item-tempo { font-size: 0.85rem; color: #888; font-family: 'Montserrat', sans-serif; white-space: nowrap; padding-top: 2px; }
+        .item-sub { font-size: 0.85rem; color: #666; margin-top: 6px; text-align: right; }
 
-        /* Map & Info */
-        .info-box { text-align: center; padding: 40px 20px; }
-        .action-button {
-            display: block; padding: 16px; margin: 10px 0;
-            border-radius: 8px; text-decoration: none; font-weight: bold;
-        }
-        .map-btn { background: var(--navy-dark); color: #fff; }
+        /* Information Section */
+        .info-grid { display: grid; grid-template-columns: 1fr; gap: 40px; }
+        .info-main h2 { font-size: 1.8rem; color: var(--navy-dark); margin-bottom: 15px; }
+        .action-button { display: block; padding: 16px; border-radius: 8px; text-decoration: none; font-weight: bold; text-align: center; }
+        .map-btn { background: var(--navy-dark); color: #fff; margin-bottom: 10px; }
         .web-btn { border: 1px solid var(--navy-dark); color: var(--navy-dark); }
+        .center-info { padding: 25px; background-color: #f9f6f2; border-radius: 15px; font-size: 0.95rem; }
+        .center-info h3 { margin-top: 0; color: var(--accent-gold); font-size: 1.1rem; }
 
-        footer { text-align: center; padding: 40px; font-size: 0.8rem; color: #aaa; background: #f9f9f9; }
+        footer { text-align: center; padding: 60px 30px; font-size: 0.85rem; color: #aaa; background: #fafafa; }
+
+        /* --- [태블릿 및 대화면 대응 미디어 쿼리] --- */
+        @media (min-width: 800px) {
+            section { padding: 80px 60px; }
+            .hero-title { font-size: 2.8rem; }
+            .hero-date { font-size: 1.5rem; }
+
+            /* 연주자 명단 2단 */
+            .player-list { grid-template-columns: 1fr 1fr; column-gap: 40px; }
+
+            /* 프로그램 좌우 배치 및 인터미션 하단 배치 */
+            .program-container { 
+                grid-template-areas: 
+                    "part1 part2"
+                    "inter inter";
+                column-gap: 80px;
+                position: relative;
+            }
+            /* 중앙 세로선 효과 */
+            .program-container::after {
+                content: "";
+                position: absolute;
+                top: 50px; bottom: 100px; left: 50%;
+                width: 1px; background-color: var(--divider);
+            }
+            .intermission { margin-top: 50px; padding-top: 30px; border-top: 1px solid var(--divider); }
+
+            /* 정보 섹션 좌우 배치 */
+            .info-grid { grid-template-columns: 1fr 1.2fr; align-items: center; }
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
+        <!-- 1. 포스터 스와이프 -->
         <section class="poster-swiper-section">
             <div class="swiper mainSwiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <img src="poster.png" alt="Soundpost Concert Poster 1">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="profile.png" alt="Soundpost Concert Poster 2">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="program.png" alt="Soundpost Concert Poster 3">
-                    </div>
+                    <div class="swiper-slide"><img src="poster.png" alt="Poster 1"></div>
+                    <div class="swiper-slide"><img src="profile.png" alt="Poster 2"></div>
+                    <div class="swiper-slide"><img src="program.png" alt="Poster 3"></div>
                 </div>
-                
                 <div class="swiper-pagination"></div>
             </div>
         </section>
 
+        <!-- 2. Hero Title & D-Day -->
+        <section class="hero-title-section">
+            <p class="hero-subtitle">SAMSUNG ELECTRONICS STRING ENSEMBLE</p>
+            <h1 class="hero-title">사운드포스트 제11회 정기 연주회</h1>
+            
+            <div class="d-day-wrapper">
+                <div id="d-day-capsule" class="d-day-capsule" onclick="toggleDDay()">
+                    <span id="d-day-label">D-DAY</span>
+                    <div id="timer-detail" class="timer-detail">
+                        <span class="detail-unit" id="h-val">00<span class="timer-unit-label">h</span></span>
+                        <span class="detail-unit" id="m-val">00<span class="timer-unit-label">m</span></span>
+                        <span class="detail-unit" id="s-val">00<span class="timer-unit-label">s</span></span>
+                    </div>
+                    <svg class="chevron-icon" viewBox="0 0 10 10"><path d="M2 3l3 3 3-3"/></svg>
+                </div>
+            </div>
+
+            <div class="hero-info-group">
+                <p class="hero-date">2026. 03. 28 SAT 2 PM</p>
+                <p class="hero-venue">오산아이드림극장</p>
+            </div>
+        </section>
+
+        <!-- 3. Greetings & Profile -->
         <section id="profile">
             <h2 class="section-title">Greetings</h2>
             <div class="greetings-text">
-                2013년 사내 런치 클래스의 작은 떨림으로 시작한 사운드포스트가 어느덧 일상과 예술을 잇는 든든한 '영혼의 기둥'으로 성장했습니다.<br>
-                음악을 사랑하는 비전공 직장인들이 틈틈이 갈고닦은 순수한 열정의 선율이 오늘 가족과 이웃 여러분의 마음에 따뜻한 소통의 울림으로 닿기를 소망합니다.<br>
-                바쁘신 중에도 저희의 음악 여행에 기꺼이 동행해 주신 관객 여러분께 진심으로 감사의 인사를 올립니다.<br>
-                <b> 삼성전자 현악 동호회 사운드포스트 회장 정준희 드림</b><br>
-
+                2013년 사내 런치 클래스의 작은 떨림으로 시작한 사운드포스트가 어느덧 일상과 예술을 잇는 든든한 '영혼의 기둥'으로 성장했습니다.<br><br>
+                음악을 사랑하는 비전공 직장인들이 틈틈이 갈고닦은 순수한 열정의 선율이 오늘 가족과 이웃 여러분의 마음에 따뜻한 소통의 울림으로 닿기를 소망합니다.<br><br>
+                바쁘신 중에도 저희의 음악 여행에 기꺼이 동행해 주신 관객 여러분께 진심으로 감사의 인사를 올립니다.
+                <p style="text-align:right;"><b>삼성전자 현악 동호회 사운드포스트 회장 정준희 드림</b></p>
             </div>
 
             <h2 class="section-title">Profile</h2>
             <div class="conductor-wrap">
-                <div class="conductor-img" style="background: url('cond_profile.jpg') no-repeat center / cover #eee;"></div>
+                <div class="conductor-img" style="background: url('cond_profile.jpg') no-repeat center / cover;"></div>
                 <div class="conductor-info">
                     <h4>지휘 | 석민지</h4>
                     <p>現 한양대학교 음악대학 재학</p>
-                    <p>성신여자대학교 아마추어 오케스트라 '크리스탈' 지휘자</p>
-                    <p>삼성전자 수원 현악오케스트라 '사운드포스트' 지휘자</p>
-                    <p>삼성전자 수원 MLD 강의 출강</p>
-                    <p>前 예술단체 '아람아트' 오케스트라 부지휘자</p>
+                    <p>성신여대 '크리스탈' 지휘자</p>
+                    <p>삼성전자 '사운드포스트' 지휘자</p>
+                    <p>前 '아람아트' 오케스트라 부지휘자</p>
                 </div>
             </div>
 
             <div class="player-list">
                 <div class="player-row"><b>Vn</b>
                     <span><b>지도 선생님 | 김이진, 노성은, 이현희</b><br>
-                        정준희, 남승수, 김경록, 김정한, 문지현, 박지혜, 박혜진, 박희철, 봉우리, 손성필, 윤성욱, 이민희, 이승복, 전요셉, 조경숙, 조진경, 최용환</span>
+                    정준희, 남승수, 김경록, 김정한, 문지현, 박지혜, 박혜진, 박희철, 봉우리, 손성필, 윤성욱, 이민희, 이승복, 전요셉, 조경숙, 조진경, 최용환</span>
                 </div>
                 <div class="player-row"><b>Va</b>
                     <span><b>지도 선생님 | 송은서</b><br>
-                        정영교, 김정은, 김혜란, 변윤희, 한지훈</span>
+                    정영교, 김정은, 김혜란, 변윤희, 한지훈</span>
                 </div>
                 <div class="player-row"><b>Vc</b>
                     <span><b>지도 선생님 | 박선욱</b><br>
-                        정미영, 손승우, 안한철, 유장선, 정해석, 주윤우, 최지영</span>
+                    정미영, 손승우, 안한철, 유장선, 정해석, 주윤우, 최지영</span>
                 </div>
-                <div class="player-row"><b>Staff</b> <span>정지혜, 김선아, 성승민, 황성주</span></div>
             </div>
         </section>
 
-        <!-- Program -->
-    <section id="program">
-        <h2 class="section-title">Program</h2>
-        
-        <div class="program-part">
-            <div class="part-title">1부</div>
-            
-            <div class="program-item">
-                <div class="item-main">
-                    <div class="item-title-group">
-                        <span class="title-kor">1. 언제나 몇 번이라도</span>
-                        <span class="title-eng">Always With Me</span>
+        <!-- 4. Program (다단 레이아웃 개선) -->
+        <section id="program">
+            <h2 class="section-title">Program</h2>
+            <div class="program-container">
+                <!-- 1부 -->
+                <div class="program-part p1">
+                    <div class="part-title">Part 1</div>
+                    <div class="program-item">
+                        <div class="item-main">
+                            <div class="item-title-group">
+                                <span class="title-kor">1. 언제나 몇 번이라도</span>
+                                <span class="title-eng">Always With Me</span>
+                            </div>
+                            <span class="item-dots"></span>
+                            <span class="item-tempo">Andante</span>
+                        </div>
+                        <div class="item-sub">지브리 / 기무라 유미 | 편곡 : 석민지</div>
                     </div>
-                    <span class="item-dots"></span>
-                    <span class="item-tempo">Andante, Vivace</span>
-                </div>
-                <div class="item-sub">원곡 : 지브리 / 기무라 유미 | 편곡 : 석민지</div>
-            </div>
-
-            <div class="program-item">
-                <div class="item-main">
-                    <div class="item-title-group">
-                        <span class="title-kor">2. 바람이 지나는 길</span>
-                        <span class="title-eng">Path of The Wind</span>
+                    <div class="program-item">
+                        <div class="item-main">
+                            <div class="item-title-group">
+                                <span class="title-kor">2. 바람이 지나는 길</span>
+                                <span class="title-eng">Path of The Wind</span>
+                            </div>
+                            <span class="item-dots"></span>
+                            <span class="item-tempo">Andante</span>
+                        </div>
+                        <div class="item-sub">지브리 / 히사이시 조 | 편곡 : 석민지</div>
                     </div>
-                    <span class="item-dots"></span>
-                    <span class="item-tempo">Andante, Vivace</span>
                 </div>
-                <div class="item-sub">원곡 : 지브리 / 히사이시 조 | 편곡 : 석민지</div>
-            </div>
 
-            <div class="program-item">
-                <div class="item-main">
-                    <div class="item-title-group">
-                        <span class="title-kor">3. 또 다시</span>
-                        <span class="title-eng">Spirited Away Reprise</span>
+                <!-- 인터미션 (그리드 하단 배치) -->
+                <div class="intermission">INTERMISSION</div>
+
+                <!-- 2부 -->
+                <div class="program-part p2">
+                    <div class="part-title">Part 2</div>
+                    <div class="program-item">
+                        <div class="item-main">
+                            <div class="item-title-group">
+                                <span class="title-kor">1. 세인트 폴 모음곡</span>
+                                <span class="title-eng">St. Paul's Suite</span>
+                            </div>
+                            <span class="item-dots"></span>
+                            <span class="item-tempo">Vivace</span>
+                        </div>
+                        <div class="item-sub">Gustav Holst</div>
                     </div>
-                    <span class="item-dots"></span>
-                    <span class="item-tempo">Andante, Vivace</span>
-                </div>
-                <div class="item-sub">원곡 : 지브리 / 히사이시 조 | 편곡 : 석민지</div>
-            </div>
-
-            <div class="program-item">
-                <div class="item-main">
-                    <div class="item-title-group">
-                        <span class="title-kor">4. 알라딘 메들리</span>
-                        <span class="title-eng">Aladdin Medley</span>
+                    <div class="program-item">
+                        <div class="item-main">
+                            <div class="item-title-group">
+                                <span class="title-kor">2. 팔라디오</span>
+                                <span class="title-eng">Palladio</span>
+                            </div>
+                            <span class="item-dots"></span>
+                            <span class="item-tempo">Vivace</span>
+                        </div>
+                        <div class="item-sub">Karl Jenkins</div>
                     </div>
-                    <span class="item-dots"></span>
-                    <span class="item-tempo">Andante, Vivace</span>
                 </div>
-                <div class="item-sub">원곡 : 디즈니 / 알란 멘켄 | 편곡 : 석민지</div>
             </div>
-        </div>
+        </section>
 
-        <div class="intermission">INTERMISSION</div>
-
-        <div class="program-part">
-            <div class="part-title">2부</div>
-            
-            <div class="program-item">
-                <div class="item-main">
-                    <div class="item-title-group">
-                        <span class="title-kor">1. 세인트 폴 모음곡</span>
-                        <span class="title-eng">St. Paul's Suite</span>
-                    </div>
-                    <span class="item-dots"></span>
-                    <span class="item-tempo">Vivace</span>
-                </div>
-                <div class="item-sub">작곡 : 구스타프 홀스트 (Gustav Holst)</div>
-            </div>
-
-            <div class="program-item">
-                <div class="item-main">
-                    <div class="item-title-group">
-                        <span class="title-kor">2. 팔라디오</span>
-                        <span class="title-eng">Palladio</span>
-                    </div>
-                    <span class="item-dots"></span>
-                    <span class="item-tempo">Vivace</span>
-                </div>
-                <div class="item-sub">작곡 : 칼 젠킨스 (Karl Jenkins)</div>
-            </div>
-
-            <div class="program-item">
-                <div class="item-main">
-                    <div class="item-title-group">
-                        <span class="title-kor">3. 장난감 교향곡</span>
-                        <span class="title-eng">Kindersinfonie</span>
-                    </div>
-                    <span class="item-dots"></span>
-                    <span class="item-tempo">Andante, Vivace</span>
-                </div>
-                <div class="item-sub">작곡 : L. 모차르트 / J. 하이든 (L. Mozart / J. Haydn)</div>
-            </div>
-        </div>
-    </section>
-
-        <section class="info-box">
+        <!-- 5. Information -->
+        <section class="info-section">
             <h2 class="section-title" style="text-align:center;">Information</h2>
-            <p><b>2026. 03. 28 SAT 2 PM</b><br>오산아이드림극장</p>
-            
-            <a href="https://m.place.naver.com/place/2018039723/location" class="action-button map-btn" target="_blank">📍 공연장 길찾기 (네이버 지도)</a>
-            <a href="https://www.osanidream.or.kr/" class="action-button web-btn" target="_blank">🌐 오산아이드림센터 홈페이지</a>
+            <div class="info-grid">
+                <div class="info-main">
+                    <h2>공연장 안내</h2>
+                    <p><strong>2026. 03. 28 (토) 오후 2시</strong><br>오산아이드림극장</p>
+                    <a href="https://m.place.naver.com/place/2018039723/location" class="action-button map-btn" target="_blank">📍 네이버 지도 길찾기</a>
+                    <a href="https://www.osanidream.or.kr/" class="action-button web-btn" target="_blank">🌐 아이드림센터 홈페이지</a>
+                </div>
+
+                <div class="center-info">
+                    <h3>💡 공연 전후 즐길 거리</h3>
+                    <img src="img_greeting.png" alt="아이드림센터 전경" style="max-width: 100%; border-radius: 10px; margin-bottom: 15px;">
+                    <p>공연장 건물 내 <strong>복합 문화 체험 공간</strong>을 이용해 보세요.</p>
+                    <ul style="padding-left: 20px; font-size: 0.85rem;">
+                        <li>시설: 테마 놀이터, 요리 체험실, 창의 놀이존</li>
+                        <li>대상: 18개월 ~ 9세 아동 및 보호자</li>
+                    </ul>
+                </div>
+            </div>
         </section>
 
         <footer>
-            &copy; 2026 Soundpost String Orchestra.<br>
-            Samsung Electronics Amateur String Club
+            &copy; 2026 Soundpost String Orchestra.
         </footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    
     <script>
-        // Audio Context 정책 대응 (이전 수정사항 유지)
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-        // Swiper 캐러셀 초기화
         const swiper = new Swiper('.mainSwiper', {
-            loop: true,               // 무한 루프
-            autoplay: {               // 자동 넘김
-                delay: 5000,          // 5초 간격
-                disableOnInteraction: false, // 사용자 조작 후에도 자동 넘김 유지
-            },
-            pagination: {             // 점 인디케이터 설정
-                el: '.swiper-pagination',
-                clickable: true,      // 점 클릭 시 이동 가능
-            },
-            keyboard: true,           // 키보드 화살표 지원 (PC)
+            loop: true, autoplay: { delay: 5000 },
+            pagination: { el: '.swiper-pagination', clickable: true }
         });
-    </script>
 
+        // D-Day Logic
+        const targetDate = new Date("March 28, 2026 14:00:00").getTime();
+        function toggleDDay() { document.getElementById('d-day-capsule').classList.toggle('expanded'); }
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+            const label = document.getElementById("d-day-label");
+            if (distance < 0) { label.innerText = "CONCERT DAY"; return; }
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distance % (1000 * 60)) / 1000);
+            label.innerText = `D-${d}`;
+            document.getElementById("h-val").innerHTML = `${String(h).padStart(2,'0')}<span class="timer-unit-label">h</span>`;
+            document.getElementById("m-val").innerHTML = `${String(m).padStart(2,'0')}<span class="timer-unit-label">m</span>`;
+            document.getElementById("s-val").innerHTML = `${String(s).padStart(2,'0')}<span class="timer-unit-label">s</span>`;
+        }
+        updateCountdown(); setInterval(updateCountdown, 1000);
+    </script>
 </body>
 </html>

@@ -19,8 +19,8 @@
         /* --- [섹션 1: 포스터 스와이프] --- */
         .poster-swiper-section { padding: 0; border: none; position: relative; background-color: #000; }
         .mainSwiper { width: 100%; height: auto; }
-        .swiper-slide { display: flex; justify-content: center; align-items: center; background-color: #fff; }
-        .swiper-slide img { width: 100%; height: auto; display: block; }
+        .mainSwiper .swiper-slide { display: flex; justify-content: center; align-items: center; background-color: #fff; }
+        .mainSwiper .swiper-slide img { width: 100%; height: auto; display: block; }
         .swiper-pagination-bullet-active { background: var(--accent-gold) !important; width: 24px; border-radius: 4px; transition: all 0.3s; }
 
         /* --- [섹션 2: Hero Title & D-Day] --- */
@@ -126,7 +126,7 @@
 
         /* --- [Guestbook Section & Visitor Counter] --- */
         .guestbook-section { background-color: var(--bg-color); }
-        .guestbook-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 25px; }
+        .guestbook-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 25px; width: 100%; }
         .visitor-count { font-size: 0.75rem; color: #aaa; font-family: 'Montserrat', sans-serif; letter-spacing: 1px; }
 
         .comment-form { margin-bottom: 40px; background: #fff; padding: 25px; border-radius: 20px; border: 1px solid #eee; width: 100%; box-sizing: border-box; }
@@ -137,8 +137,8 @@
         .btn-comment:active { transform: scale(0.98); background-color: var(--accent-gold); }
 
         /* Comment Swiper (List Style) */
-        .comment-swiper-container { width: 100%; height: auto; position: relative; padding-bottom: 40px; }
-        .comment-slide { display: flex; flex-direction: column; gap: 0; min-height: 200px; }
+        .comment-swiper-container { width: 100%; height: auto; position: relative; padding-bottom: 40px; background: transparent; }
+        .comment-slide { display: flex; flex-direction: column; gap: 0; min-height: 200px; width: 100%; box-sizing: border-box; }
         
         .comment-item { 
             display: flex; 
@@ -148,6 +148,8 @@
             border-bottom: 1px solid #eee; 
             animation: fadeIn 0.5s ease;
             background: transparent;
+            width: 100%;
+            box-sizing: border-box;
         }
         .comment-item:last-child { border-bottom: none; }
         
@@ -215,8 +217,9 @@
 
         @media (min-width: 800px) and (orientation: landscape) {
             .mainSwiper { height: 90vh; background-color: #000; }
-            .swiper-slide { background-color: #000; }
-            .swiper-slide img { height: 90vh; width: auto; margin: 0 auto; object-fit: contain; }
+            /* 메인 스와이퍼의 슬라이드만 배경색 적용하여 방명록에 영향 주지 않음 */
+            .mainSwiper .swiper-slide { background-color: #000; }
+            .mainSwiper .swiper-slide img { height: 90vh; width: auto; margin: 0 auto; object-fit: contain; }
         }
     </style>
 </head>

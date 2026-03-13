@@ -106,13 +106,17 @@
         .attendance-text { font-size: 1.05rem; color: #666; margin-bottom: 25px; word-break: keep-all; }
 
         /* --- [Information Section] --- */
-        .info-grid { display: grid; grid-template-columns: 1fr; gap: 40px; }
+        .info-grid { display: flex; flex-direction: column; gap: 40px; }
+        .info-main { order: 1; }
+        .center-info { order: 2; }
+        .parking-box { order: 3; }
+
         .info-main h2 { font-size: 1.8rem; color: var(--navy-dark); margin-bottom: 15px; }
         .action-button { display: block; padding: 16px; border-radius: 8px; text-decoration: none; font-weight: bold; text-align: center; margin-bottom: 10px; }
         .map-btn { background: var(--navy-dark); color: #fff; }
         .web-btn { border: 1px solid var(--navy-dark); color: var(--navy-dark); }
         
-        .parking-box { background-color: #f9f6f2; padding: 20px; border-radius: 12px; margin-top: 20px; border: 1px solid #eee; }
+        .parking-box { background-color: #f9f6f2; padding: 20px; border-radius: 12px; border: 1px solid #eee; }
         .parking-title { font-weight: 700; font-size: 0.95rem; color: #c0392b; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
         .parking-detail { font-size: 0.85rem; color: #666; line-height: 1.5; }
         .parking-detail strong { color: var(--main-text); }
@@ -129,7 +133,7 @@
         .center-info { padding: 25px; background-color: #f9f6f2; border-radius: 15px; font-size: 0.95rem; }
         .center-info h3 { margin-top: 0; color: var(--accent-gold); font-size: 1.1rem; }
 
-        /* --- [RSVP 모달] --- */
+        /* --- [모달 공통] --- */
         .modal-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.7); display: none; justify-content: center; 
@@ -158,7 +162,17 @@
             padding: 15px; border-radius: 8px; font-weight: bold; font-size: 1.1rem; 
             cursor: pointer; margin-top: 10px; transition: 0.3s;
         }
-        .btn-submit:hover { background-color: var(--accent-gold); }
+        .btn-submit:disabled { background-color: #999; cursor: not-allowed; }
+        .btn-submit:hover:not(:disabled) { background-color: var(--accent-gold); }
+
+        /* --- [성공 메시지 모달 커스텀] --- */
+        #successModal .modal-content { text-align: center; }
+        .success-icon { font-size: 3rem; color: #2ecc71; margin-bottom: 20px; }
+        .btn-confirm { 
+            background: var(--navy-dark); color: #fff; border: none; 
+            padding: 12px 30px; border-radius: 50px; font-weight: bold; 
+            cursor: pointer; margin-top: 10px; 
+        }
 
         footer { text-align: center; padding: 60px 30px; font-size: 0.85rem; color: #aaa; background: #fafafa; }
 
@@ -174,13 +188,30 @@
             }
             .intermission { display: none; }
             .program-container::after { content: ""; position: absolute; top: 50px; bottom: 0; left: 50%; width: 1px; background-color: var(--divider); }
-            .info-grid { grid-template-columns: 1fr 1.2fr; align-items: center; }
+            
+            .info-grid { 
+                display: grid; 
+                grid-template-columns: 1fr 1.2fr; 
+                align-items: start;
+                gap: 40px;
+            }
+            .info-main { order: unset; grid-column: 1; }
+            .parking-box { order: unset; grid-column: 1; margin-top: 0; }
+            .center-info { order: unset; grid-column: 2; grid-row: 1 / 3; }
+
             .notice-grid { grid-template-columns: repeat(4, 1fr); }
         }
 
+        /* --- [가로가 긴 화면 대응: 포스터 높이 90% 제한] --- */
         @media (min-width: 800px) and (orientation: landscape) {
-            .mainSwiper { height: 80vh; }
-            .swiper-slide img { height: 100%; width: auto; margin: 0 auto; }
+            .mainSwiper { height: 90vh; background-color: #000; }
+            .swiper-slide { background-color: #000; }
+            .swiper-slide img { 
+                height: 90vh; 
+                width: auto; 
+                margin: 0 auto; 
+                object-fit: contain; 
+            }
         }
     </style>
 </head>
@@ -192,8 +223,9 @@
             <div class="swiper mainSwiper">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide"><img src="poster.png" alt="포스터 1"></div>
-                    <div class="swiper-slide"><img src="profile.png" alt="포스터 2"></div>
-                    <div class="swiper-slide"><img src="program.png" alt="포스터 3"></div>
+                    <div class="swiper-slide"><img src="poster2.jpg" alt="포스터 2"></div>
+                    <div class="swiper-slide"><img src="poster3.jpg" alt="포스터 3"></div>
+                    <div class="swiper-slide"><img src="poster4.png" alt="포스터 4"></div>
                 </div>
                 <div class="swiper-pagination"></div>
             </div>
@@ -273,7 +305,6 @@
             <div class="program-container">
                 <div class="program-part p1">
                     <div class="part-title">1부</div>
-                    
                     <div class="program-item">
                         <div class="item-main">
                             <div class="item-title-group">
@@ -285,7 +316,6 @@
                         </div>
                         <div class="item-sub">원곡 : 지브리 / 기무라 유미 | 편곡 : 석민지</div>
                     </div>
-    
                     <div class="program-item">
                         <div class="item-main">
                             <div class="item-title-group">
@@ -297,7 +327,6 @@
                         </div>
                         <div class="item-sub">원곡 : 지브리 / 히사이시 조 | 편곡 : 석민지</div>
                     </div>
-    
                     <div class="program-item">
                         <div class="item-main">
                             <div class="item-title-group">
@@ -309,7 +338,6 @@
                         </div>
                         <div class="item-sub">원곡 : 지브리 / 히사이시 조 | 편곡 : 석민지</div>
                     </div>
-    
                     <div class="program-item">
                         <div class="item-main">
                             <div class="item-title-group">
@@ -327,7 +355,6 @@
 
                 <div class="program-part p2">
                     <div class="part-title">2부</div>
-                    
                     <div class="program-item">
                         <div class="item-main">
                             <div class="item-title-group">
@@ -339,7 +366,6 @@
                         </div>
                         <div class="item-sub">작곡 : 구스타프 홀스트 (Gustav Holst)</div>
                     </div>
-
                     <div class="program-item">
                         <div class="item-main">
                             <div class="item-title-group">
@@ -351,7 +377,6 @@
                         </div>
                         <div class="item-sub">작곡 : 칼 젠킨스 (Karl Jenkins)</div>
                     </div>
-
                     <div class="program-item">
                         <div class="item-main">
                             <div class="item-title-group">
@@ -382,20 +407,6 @@
                     <p><strong>2026. 03. 28 (토) 오후 2시</strong><br>오산아이드림극장</p>
                     <a href="https://m.place.naver.com/place/2018039723/location?filter=location&selected_place_id=2018039723" class="action-button map-btn" target="_blank">📍 네이버 지도 길찾기</a>
                     <a href="https://www.osanidream.or.kr/" class="action-button web-btn" target="_blank">🌐 아이드림센터 홈페이지</a>
-                    
-                    <div class="parking-box">
-                        <div class="parking-title">⚠️ 주차 안내</div>
-                        <div class="parking-detail">
-                            대중교통 또는 <strong>양산도서관 공영주차장</strong>(유료, 도보 3분거리)를 이용해 주시기 바랍니다.<br>
-                            <span style="color:#c0392b; font-weight:700;">※ 오산아이드림센터(공연장 건물) 내 주차는 불가능합니다.</span>
-                        </div>
-                        <div class="library-info">
-                            <strong>[양산도서관 공영주차장]</strong><br>
-                            • 요금: 최초 1시간 무료, 10분 초과당 200원<br>
-                            • 일일권: 12시간 4,000원 (선불)<br>
-                            • 주소: 오산시 양산로 410번길 40
-                        </div>
-                    </div>
                 </div>
 
                 <div class="center-info">
@@ -407,6 +418,20 @@
                         <li>이용 대상: 18개월 ~ 9세 아동 및 보호자</li>
                         <li>팁: 사전 예약 권장 (공연 전후 가족 나들이 추천)</li>
                     </ul>
+                </div>
+
+                <div class="parking-box">
+                    <div class="parking-title">⚠️ 주차 안내</div>
+                    <div class="parking-detail">
+                        대중교통 또는 <strong>양산도서관 공영주차장</strong>(유료, 도보 3분거리)를 이용해 주시기 바랍니다.<br>
+                        <span style="color:#c0392b; font-weight:700;">※ 오산아이드림센터(공연장 건물) 내 주차는 불가능합니다.</span>
+                    </div>
+                    <div class="library-info">
+                        <strong>[양산도서관 공영주차장]</strong><br>
+                        • 요금: 최초 1시간 무료, 10분 초과당 200원<br>
+                        • 일일권: 12시간 4,000원 (선불)<br>
+                        • 주소: 오산시 양산로 410번길 40
+                    </div>
                 </div>
             </div>
 
@@ -437,7 +462,7 @@
             </div>
         </section>
 
-        <!-- RSVP 모달창 -->
+        <!-- [RSVP 등록 모달창] -->
         <div id="rsvpModal" class="modal-overlay" onclick="closeModal(event)">
             <div class="modal-content" onclick="event.stopPropagation()">
                 <button class="modal-close" onclick="closeModal(event)">&times;</button>
@@ -456,8 +481,18 @@
                         <label class="form-label">응원 메시지 (선택)</label>
                         <textarea id="rsvpMessage" class="form-input" rows="3" placeholder="단원들에게 응원의 한마디를 남겨주세요"></textarea>
                     </div>
-                    <button type="submit" class="btn-submit">등록 완료</button>
+                    <button type="submit" id="submitBtn" class="btn-submit">등록 완료</button>
                 </form>
+            </div>
+        </div>
+
+        <!-- [성공 메시지 모달창] (팝업 대신 사용) -->
+        <div id="successModal" class="modal-overlay" onclick="closeSuccessModal()">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <div class="success-icon">✓</div>
+                <h2 class="modal-title">등록 완료</h2>
+                <p id="successMessage" class="modal-subtitle">참석 등록이 완료되었습니다.</p>
+                <button class="btn-confirm" onclick="closeSuccessModal()">확인</button>
             </div>
         </div>
 
@@ -468,6 +503,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
+        // --- 구글 시트 웹 앱 URL ---
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxQn1THviw5Llc-hmgf1D4IzTyoRFQhEgYcZMHyLqEJdA_oG2ThGJqmWxsLFAXLPUSR/exec";
+
         const swiper = new Swiper('.mainSwiper', {
             loop: true, autoplay: { delay: 5000 },
             pagination: { el: '.swiper-pagination', clickable: true }
@@ -492,14 +530,55 @@
         updateCountdown(); setInterval(updateCountdown, 1000);
 
         function openModal() { document.getElementById('rsvpModal').style.display = 'flex'; }
-        function closeModal(e) { document.getElementById('rsvpModal').style.display = 'none'; }
+        function closeModal() { document.getElementById('rsvpModal').style.display = 'none'; }
+        
+        function openSuccessModal(name) {
+            document.getElementById('successMessage').innerText = `${name}님, 참석 등록이 완료되었습니다. 감사합니다!`;
+            document.getElementById('successModal').style.display = 'flex';
+        }
+        function closeSuccessModal() {
+            document.getElementById('successModal').style.display = 'none';
+        }
 
         document.getElementById('rsvpForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            if (SCRIPT_URL.includes("여기에_복사한")) {
+                console.error("URL 미설정");
+                return;
+            }
+
+            const btn = document.getElementById('submitBtn');
             const name = document.getElementById('rsvpName').value;
-            const count = document.getElementById('rsvpCount').value;
-            alert(`${name}님, 총 ${count}분의 참석 등록이 완료되었습니다. 감사합니다!`);
-            closeModal();
+            
+            btn.disabled = true;
+            btn.innerText = "전송 중...";
+
+            const formData = {
+                name: name,
+                count: document.getElementById('rsvpCount').value,
+                message: document.getElementById('rsvpMessage').value
+            };
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify(formData),
+                mode: 'no-cors'
+            })
+            .then(() => {
+                openSuccessModal(name);
+                document.getElementById('rsvpForm').reset();
+                closeModal();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('successMessage').innerText = "죄송합니다. 등록 중 오류가 발생했습니다. 다시 시도해 주세요.";
+                document.getElementById('successModal').style.display = 'flex';
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerText = "등록 완료";
+            });
         });
     </script>
 </body>

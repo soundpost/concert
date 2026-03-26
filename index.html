@@ -78,6 +78,16 @@
         .player-row b { width: 55px; color: var(--navy-dark); flex-shrink: 0; }
         .player-row span { word-break: keep-all; }
 
+        /* --- [섹션 4: 연습 스케치 영상] --- */
+        .sketch-video-section { background-color: #f9f9f9; text-align: center; }
+        .video-wrapper { 
+            position: relative; width: 100%; padding-bottom: 56.25%; /* 16:9 ratio */
+            height: 0; overflow: hidden; border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); background: #000;
+        }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .video-caption { margin-top: 15px; font-size: 0.9rem; color: #888; word-break: keep-all; }
+
         /* --- [Program Section] --- */
         .program-container { 
             display: grid; 
@@ -307,7 +317,21 @@
             </div>
         </section>
 
-        <!-- 4. Program -->
+        <!-- 4. 연습 스케치 영상 섹션 (추가됨) -->
+        <section id="sketch-video" class="sketch-video-section">
+            <h2 class="section-title">Practice Sketch</h2>
+            <div class="video-wrapper">
+                <!-- 유튜브 IFrame API를 통한 임베딩 -->
+                <iframe id="youtube-player" 
+                        src="https://www.youtube.com/embed/XMoy3kxHobk?enablejsapi=1&mute=1&playlist=XMoy3kxHobk&loop=1" 
+                        title="사운드포스트 연습 스케치" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen></iframe>
+            </div>
+            <div class="video-caption">단원들이 정성껏 준비한 연습 과정을 영상으로 만나보세요.</div>
+        </section>
+
+        <!-- 5. Program -->
         <section id="program">
             <h2 class="section-title">Program</h2>
             <div class="program-container">
@@ -400,13 +424,13 @@
             </div>
         </section>
 
-        <!-- 5. 참석 확인 섹션 -->
+        <!-- 6. 참석 확인 섹션 -->
         <section class="attendance-section">
             <div class="attendance-text">연주회에 소중한 발걸음을 해주실 분들의<br>참석 여부를 미리 알려주시면 큰 도움이 됩니다.</div>
             <button class="btn-action" onclick="openModal('rsvpModal')">참석 회신하기</button>
         </section>
 
-        <!-- 6. Information -->
+        <!-- 7. Information -->
         <section class="info-section">
             <h2 class="section-title" style="text-align:center;">Information</h2>
             <div class="info-grid">
@@ -470,7 +494,7 @@
             </div>
         </section>
 
-        <!-- 7. Guestbook Section (Visitor Counter next to title) -->
+        <!-- 8. Guestbook Section & Visitor Counter -->
         <section id="guestbook" class="guestbook-section">
             <div class="guestbook-header">
                 <h2 class="section-title" style="margin-bottom:0;">Guestbook</h2>
@@ -485,14 +509,12 @@
                 </div>
             </div>
 
-            <!-- Comment Swiper (Refined List Layout) -->
             <div class="swiper commentSwiper comment-swiper-container">
                 <div id="comment-swiper-wrapper" class="swiper-wrapper">
                     <div class="swiper-slide">
                         <p style="text-align:center; color:#aaa; font-size:0.8rem; padding: 40px 0;">메시지를 불러오는 중...</p>
                     </div>
                 </div>
-                <!-- Pagination -->
                 <div class="swiper-pagination comment-pagination"></div>
             </div>
         </section>
@@ -535,11 +557,38 @@
         </footer>
     </div>
 
+    <!-- YouTube API 및 스크립트 -->
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwWFR_KNhBdBBzKJz832LG_5IdRj00-89bE899Fs-0ipUUkWIp5olZgOfTD0GscCBCe3Q/exec";
         let commentSwiperInstance = null;
+        let youtubePlayer;
 
+        // 1. YouTube Player API 설정
+        function onYouTubeIframeAPIReady() {
+            youtubePlayer = new YT.Player('youtube-player', {
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            // Intersection Observer를 사용하여 화면에 보일 때 자동 재생
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        event.target.playVideo();
+                    } else {
+                        event.target.pauseVideo();
+                    }
+                });
+            }, { threshold: 0.5 });
+            observer.observe(document.getElementById('sketch-video'));
+        }
+
+        // 2. 초기 데이터 로드 (방문자수 & 댓글 목록)
         async function loadInitialData() {
             try {
                 const response = await fetch(SCRIPT_URL);
@@ -555,65 +604,44 @@
         function renderCommentSlides(comments) {
             const wrapper = document.getElementById('comment-swiper-wrapper');
             wrapper.innerHTML = '';
-
             if (!comments || comments.length === 0) {
                 wrapper.innerHTML = '<div class="swiper-slide"><p style="text-align:center; color:#aaa; font-size:0.8rem; padding: 40px 0;">첫 번째 응원 메시지를 남겨보세요!</p></div>';
                 return;
             }
-
             for (let i = 0; i < comments.length; i += 5) {
                 const chunk = comments.slice(i, i + 5);
                 const slide = document.createElement('div');
                 slide.className = 'swiper-slide comment-slide';
-                
                 chunk.forEach(c => {
                     const dateObj = new Date(c.date);
                     const dateStr = `${dateObj.getMonth()+1}.${dateObj.getDate()} ${dateObj.getHours()}:${String(dateObj.getMinutes()).padStart(2,'0')}`;
-                    
                     const item = document.createElement('div');
                     item.className = 'comment-item';
-                    item.innerHTML = `
-                        <div class="comment-main">
-                            <span class="comment-author">${c.name}</span>
-                            <span class="comment-body">${c.content}</span>
-                        </div>
-                        <span class="comment-date">${dateStr}</span>
-                    `;
+                    item.innerHTML = `<div class="comment-main"><span class="comment-author">${c.name}</span><span class="comment-body">${c.content}</span></div><span class="comment-date">${dateStr}</span>`;
                     slide.appendChild(item);
                 });
                 wrapper.appendChild(slide);
             }
-
             if (commentSwiperInstance) commentSwiperInstance.destroy();
             commentSwiperInstance = new Swiper('.commentSwiper', {
-                loop: comments.length > 5,
-                autoplay: { delay: 6000, disableOnInteraction: false },
-                pagination: { el: '.comment-pagination', clickable: true },
-                autoHeight: true,
-                spaceBetween: 30
+                loop: comments.length > 5, autoplay: { delay: 6000, disableOnInteraction: false },
+                pagination: { el: '.comment-pagination', clickable: true }, autoHeight: true, spaceBetween: 30
             });
         }
 
+        // 3. 댓글 등록 및 RSVP 등록 로직 (기존 유지)
         async function submitComment() {
             const name = document.getElementById('comment-name').value.trim();
             const content = document.getElementById('comment-content').value.trim();
-            if(!name || !content) return alert("성함과 메시지를 모두 입력해 주세요.");
+            if(!name || !content) return;
             const btn = document.querySelector('.btn-comment');
             btn.disabled = true;
-            btn.innerText = "전송 중...";
-            const payload = { action: "comment", name, content };
             try {
-                await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), mode: 'no-cors' });
-                document.getElementById('comment-name').value = '';
-                document.getElementById('comment-content').value = '';
+                await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: "comment", name, content }), mode: 'no-cors' });
+                document.getElementById('comment-name').value = ''; document.getElementById('comment-content').value = '';
                 showSuccess("등록 완료", "따뜻한 응원 감사합니다!");
                 setTimeout(loadInitialData, 1500); 
-            } catch (e) {
-                alert("등록 중 오류가 발생했습니다.");
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "등록";
-            }
+            } catch (e) { alert("오류 발생"); } finally { btn.disabled = false; }
         }
 
         document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
@@ -621,44 +649,47 @@
             const btn = document.getElementById('rsvpSubmitBtn');
             const name = document.getElementById('rsvpName').value;
             btn.disabled = true;
-            btn.innerText = "전송 중...";
-            const payload = { action: "rsvp", name: name, count: document.getElementById('rsvpCount').value, message: document.getElementById('rsvpMessage').value };
             try {
-                await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), mode: 'no-cors' });
-                closeModal('rsvpModal');
-                showSuccess("등록 완료", `${name}님, 참석 회신이 완료되었습니다.`);
+                await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({
+                    action: "rsvp", name, count: document.getElementById('rsvpCount').value, message: document.getElementById('rsvpMessage').value
+                }), mode: 'no-cors' });
+                closeModal('rsvpModal'); showSuccess("등록 완료", `${name}님, 참석 회신이 완료되었습니다.`);
                 document.getElementById('rsvpForm').reset();
-            } catch (e) {
-                alert("오류가 발생했습니다.");
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "등록 완료";
-            }
+            } catch (e) { alert("오류 발생"); } finally { btn.disabled = false; }
         });
 
-        const swiper = new Swiper('.mainSwiper', {
-            loop: true, autoplay: { delay: 5000 },
-            pagination: { el: '.swiper-pagination', clickable: true }
-        });
-
-        const targetDate = new Date("March 28, 2026 14:00:00").getTime();
-        function toggleDDay() { document.getElementById('d-day-capsule').classList.toggle('expanded'); }
+        // 4. 스와이퍼 및 D-Day (당일 00시부터 D-0)
+        const mainSwiper = new Swiper('.mainSwiper', { loop: true, autoplay: { delay: 5000 }, pagination: { el: '.swiper-pagination', clickable: true } });
+        
         function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
+            const now = new Date();
+            // 당일 기준 계산을 위해 오늘 00:00:00과 타겟 날짜 00:00:00 비교
+            const targetDay = new Date(2026, 2, 28); // 3월 28일
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            
+            const diffTime = targetDay - today;
+            const dDayCount = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
             const label = document.getElementById("d-day-label");
-            if (distance < 0) { label.innerText = "CONCERT DAY"; return; }
-            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((distance % (1000 * 60)) / 1000);
-            label.innerText = `D-${d}`;
-            document.getElementById("h-val").innerHTML = `${String(h).padStart(2,'0')}<span class="timer-unit-label">h</span>`;
-            document.getElementById("m-val").innerHTML = `${String(m).padStart(2,'0')}<span class="timer-unit-label">m</span>`;
-            document.getElementById("s-val").innerHTML = `${String(s).padStart(2,'0')}<span class="timer-unit-label">s</span>`;
-        }
-        updateCountdown(); setInterval(updateCountdown, 1000);
+            if (dDayCount > 0) label.innerText = `D-${dDayCount}`;
+            else if (dDayCount === 0) label.innerText = `D-0`;
+            else label.innerText = `CONCERT DAY`;
 
+            // 디테일 타이머 (실제 공연 시간인 14:00 기준)
+            const targetFullDate = new Date(2026, 2, 28, 14, 0, 0).getTime();
+            const distance = targetFullDate - now.getTime();
+            if (distance > 0) {
+                const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((distance % (1000 * 60)) / 1000);
+                document.getElementById("h-val").innerHTML = `${String(h).padStart(2,'0')}<span class="timer-unit-label">h</span>`;
+                document.getElementById("m-val").innerHTML = `${String(m).padStart(2,'0')}<span class="timer-unit-label">m</span>`;
+                document.getElementById("s-val").innerHTML = `${String(s).padStart(2,'0')}<span class="timer-unit-label">s</span>`;
+            }
+        }
+        setInterval(updateCountdown, 1000); updateCountdown();
+
+        function toggleDDay() { document.getElementById('d-day-capsule').classList.toggle('expanded'); }
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
         function showSuccess(title, msg) {
